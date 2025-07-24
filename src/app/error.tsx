@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import GlobalFallback from "@/components/GlobalFallback";
+import { useEffect } from "react";
 
 // biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
 export default function Error({
