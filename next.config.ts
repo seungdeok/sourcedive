@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
       exclude: ["error", "warn"],
     },
   },
+  experimental: {
+    globalNotFound: true,
+  },
 };
 
 export default nextConfig;
