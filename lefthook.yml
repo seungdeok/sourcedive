@@ -1,0 +1,9 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.{js,ts,jsx,tsx,mts}"
+      run: pnpm lint {staged_files}
+    lint:fix:
+      glob: "*.{js,ts,jsx,tsx,mts}"
+      run: pnpm lint:fix {staged_files}

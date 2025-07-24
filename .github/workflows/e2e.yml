@@ -1,0 +1,34 @@
+# https://playwright.dev/docs/ci-github
+name: Playwright Tests
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - main
+jobs:
+  playwright:
+    name: "Playwright Tests"
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.54.0-noble
+      options: --user 1001
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: ⚙️ Enable Corepack
+        run: corepack enable
+      
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
+      
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: 🔍 Run tests
+        run: pnpm test:e2e
