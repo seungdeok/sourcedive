@@ -2,7 +2,8 @@ import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense, lazy } from "react";
 
-const SearchTab = lazy(() => import("./SearchTab"));
+const NpmSearchTab = lazy(() => import("./NpmSearchTab"));
+const GithubSearchTab = lazy(() => import("./GithubSearchTab"));
 const ExternalTab = lazy(() => import("./ExternalTab"));
 
 export function MainTabs() {
@@ -17,13 +18,13 @@ export function MainTabs() {
 
         <TabsContent value="npm" className="mt-6">
           <Suspense fallback={<GlobalLoadingFallback />}>
-            <SearchTab />
+            <NpmSearchTab />
           </Suspense>
         </TabsContent>
 
         <TabsContent value="github" className="mt-6">
           <Suspense fallback={<GlobalLoadingFallback />}>
-            <SearchTab />
+            <GithubSearchTab />
           </Suspense>
         </TabsContent>
 
