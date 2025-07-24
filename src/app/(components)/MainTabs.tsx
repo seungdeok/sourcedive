@@ -3,25 +3,34 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense, lazy } from "react";
 
 const SearchTab = lazy(() => import("./SearchTab"));
-// const UploadTab = lazy(() => import("./UploadTab"));
+const ExternalTab = lazy(() => import("./ExternalTab"));
 
 export function MainTabs() {
   return (
     <div className="w-full">
-      <Tabs defaultValue="search">
+      <Tabs defaultValue="npm">
         <TabsList>
-          <TabsTrigger value="search">🔍 검색</TabsTrigger>
-          <TabsTrigger value="upload">📁 업로드</TabsTrigger>
+          <TabsTrigger value="npm">🔍 NPM 검색</TabsTrigger>
+          <TabsTrigger value="github">🔍 Github 검색</TabsTrigger>
+          <TabsTrigger value="external">📁 외부파일</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="search" className="mt-6">
+        <TabsContent value="npm" className="mt-6">
           <Suspense fallback={<GlobalLoadingFallback />}>
             <SearchTab />
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="upload" className="mt-6">
-          Update Tab
+        <TabsContent value="github" className="mt-6">
+          <Suspense fallback={<GlobalLoadingFallback />}>
+            <SearchTab />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="external" className="mt-6">
+          <Suspense fallback={<GlobalLoadingFallback />}>
+            <ExternalTab />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </div>
