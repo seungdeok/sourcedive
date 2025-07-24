@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   compiler: {
     removeConsole: {
-      exclude: ["error", "warn"],
+      exclude: process.env.NODE_ENV === "production" ? ["error", "warn"] : ["error", "warn", "log"],
     },
   },
   experimental: {
