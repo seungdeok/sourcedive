@@ -1,4 +1,4 @@
-import { decodePackageName } from "@/app/packages/[...package_name]/(utils)/decodePackageName";
+import { decodePackageName } from "@/lib/decodePackageName";
 import type { PackageVersion } from "@/types/package";
 import { type NextRequest, NextResponse } from "next/server";
 

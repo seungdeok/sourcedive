@@ -1,11 +1,11 @@
 import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
 import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
+import { decodePackageName } from "@/lib/decodePackageName";
 import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PackageDetail } from "./(components)/PackageDetail";
-import { decodePackageName } from "./(utils)/decodePackageName";
 
 type Props = {
   params: Promise<{ package_name: string[] }>;
