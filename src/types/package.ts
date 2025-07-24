@@ -5,13 +5,16 @@ export type PackageVersion = {
   version: string;
   keywords?: string[];
   author?: string | { name: string; email?: string; url?: string };
+  license?: string;
+  homepage?: string;
+  description?: string;
   dist: {
     integrity: string;
     shasum: string;
     tarball: string;
     fileCount: number;
     unpackedSize: number;
-    signatures: {
+    signatures?: {
       keyid: string;
       sig: string;
     }[];
@@ -19,6 +22,7 @@ export type PackageVersion = {
   main?: string;
   type?: string;
   types?: string;
+  module?: string;
   _from?: string;
   exports?: Record<
     string,
@@ -56,6 +60,15 @@ export type PackageVersion = {
     host: string;
     tmp: string;
   };
+  repository?:
+    | string
+    | {
+        directory?: string;
+        type: string;
+        url: string;
+      };
+  gitHead?: string;
+  bugs?: string | { url?: string; email?: string };
 };
 
 export type PackageMetadata = {
