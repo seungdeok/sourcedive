@@ -81,3 +81,25 @@ test("메인 페이지 > 존재하지 않는 패키지를 검색하면 404 페�
   await expect(page).toHaveURL("/packages/aab1bbc2");
   await expect(page.getByText("NEXT_HTTP_ERROR_FALLBACK;404")).toBeVisible();
 });
+
+test("메인 페이지 > 존재하는 패키지를 검색하면 패키지 상세 페이지로 이동한다", async ({ page }) => {
+  // given: 메인 페이지에 접속한다
+  await page.goto("/");
+  await page.waitForSelector("[role=tablist]");
+
+  const searchTab = page.getByRole("tab", { name: "🔍 검색" });
+  const uploadTab = page.getByRole("tab", { name: "📁 업로드" });
+  await expect(searchTab).toHaveAttribute("aria-selected", "true");
+  await expect(uploadTab).toHaveAttribute("aria-selected", "false");
+
+  // when: 검색 탭을 클릭하고 존재하는 패키지를 검색한다
+  await searchTab.click();
+  await page.getByPlaceholder("패키지명을 입력해주세요").fill("react");
+
+  // then: 검색 버튼을 클릭하면 패키지 상세 페이지로 이동한다
+  await page.getByRole("button", { name: "🔍 검색" }).click();
+  await expect(page).toHaveURL("/packages/react");
+
+  // then: 패키지 상세 페이지에서 패키지 이름이 표시된다
+  await expect(page.getByRole("heading", { name: "react" })).toBeVisible();
+});
