@@ -33,15 +33,12 @@ jobs:
 
         - name: 📦 Install dependencies
           run: pnpm install --frozen-lockfile
-
-        - name: 📦 Install Vercel CLI
-          run: pnpm install --global vercel@latest
         
         - name: 🔍 Pull Vercel Environment Information
-          run: vercel pull --yes --environment=production --token=${{ env.VERCEL_TOKEN }}
+          run: npx vercel pull --yes --environment=production --token=${{ env.VERCEL_TOKEN }}
         
         - name: 🔍 Build Project Artifacts
-          run: vercel build --prod --token=${{ env.VERCEL_TOKEN }}
+          run: npx vercel build --prod --token=${{ env.VERCEL_TOKEN }}
         
         - name: 🚀 Deploy Project Artifacts to Vercel
-          run: vercel deploy --prebuilt --prod --token=${{ env.VERCEL_TOKEN }}
+          run: npx vercel deploy --prebuilt --prod --token=${{ env.VERCEL_TOKEN }}
