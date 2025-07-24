@@ -4,7 +4,6 @@
   "packageManager": "pnpm@9.12.0",
   "private": true,
   "scripts": {
-    "postinstall": "pnpm exec playwright install --with-deps",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
