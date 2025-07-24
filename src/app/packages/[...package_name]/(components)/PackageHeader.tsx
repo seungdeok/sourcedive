@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Download, ExternalLink, GithubIcon, Scale, User } from "lucide-react";
+import { ExternalLink, GithubIcon, Scale, User } from "lucide-react";
 import Link from "next/link";
 import type { PackageVersion } from "../../../../types/package";
 
@@ -22,7 +22,7 @@ export function PackageHeader({ metadata }: Props) {
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-bold text-gray-900">{name}</h1>
-              <Badge className="text-sm" variant="secondary">
+              <Badge className="text-sm" variant="secondary" data-testid="package-version">
                 v{metadata.version}
               </Badge>
             </div>
@@ -52,7 +52,9 @@ export function PackageHeader({ metadata }: Props) {
           <div className="flex items-center gap-2">
             <Scale className="w-4 h-4 text-gray-500" />
             <div>
-              <div className="text-sm font-medium">{metadata.license || "Unknown"}</div>
+              <div className="text-sm font-medium" data-testid="package-license">
+                {metadata.license || "Unknown"}
+              </div>
               <div className="text-xs text-gray-500">License</div>
             </div>
           </div>
@@ -60,7 +62,9 @@ export function PackageHeader({ metadata }: Props) {
           <div className="flex items-center gap-2">
             <User className="w-4 h-4 text-gray-500" />
             <div>
-              <div className="text-sm font-medium">{author}</div>
+              <div className="text-sm font-medium" data-testid="package-author">
+                {author}
+              </div>
               <div className="text-xs text-gray-500">Author</div>
             </div>
           </div>
