@@ -4,6 +4,7 @@
   "packageManager": "pnpm@9.12.0",
   "private": true,
   "scripts": {
+    "postinstall": "pnpm exec playwright install --with-deps",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -12,8 +13,8 @@
     "lint:fix": "biome check --write --unsafe",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:ci": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:ci": "vitest run && pnpm test:e2e"
   },
   "dependencies": {
     "@radix-ui/react-separator": "^1.1.7",

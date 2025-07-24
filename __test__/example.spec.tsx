@@ -4,5 +4,5 @@ import { expect, test } from "vitest";
 
 test("Page", () => {
   render(<Page />);
-  expect(screen.getByRole("heading", { level: 1, name: "Home" })).toBeDefined();
+  expect(screen.getByRole("heading", { level: 1, name: "Source Dive" })).toBeDefined();
 });
