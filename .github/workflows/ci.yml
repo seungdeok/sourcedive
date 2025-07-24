@@ -32,106 +32,106 @@ jobs:
       - name: 📦 Install dependencies
         run: pnpm install --frozen-lockfile
 
-    build:
-      needs: setup
-      runs-on: ubuntu-latest
-      steps:
-        - name: 📦 Checkout Repository
-          uses: actions/checkout@v4
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
 
-        - name: ⚙️ Enable Corepack
-          run: corepack enable
+      - name: ⚙️ Enable Corepack
+        run: corepack enable
 
-        - name: ⚙️ Setup Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version-file: .nvmrc
-            cache: "pnpm"
-            cache-dependency-path: "pnpm-lock.yaml"
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
-        - name: 📦 Install dependencies
-          run: pnpm install --frozen-lockfile
-        
-        - name: 🔍 Build
-          run: pnpm run build
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: 🔍 Build
+        run: pnpm run build
 
-    lint:
-      needs: setup
-      runs-on: ubuntu-latest
-      steps:
-        - name: 📦 Checkout Repository
-          uses: actions/checkout@v4
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
 
-        - name: ⚙️ Enable Corepack
-          run: corepack enable
+      - name: ⚙️ Enable Corepack
+        run: corepack enable
 
-        - name: ⚙️ Setup Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version-file: .nvmrc
-            cache: "pnpm"
-            cache-dependency-path: "pnpm-lock.yaml"
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
-        - name: 📦 Install dependencies
-          run: pnpm install --frozen-lockfile
-        
-        - name: 🔍 Lint
-          run: pnpm run lint
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: 🔍 Lint
+        run: pnpm run lint
 
-    test:
-      needs: setup
-      runs-on: ubuntu-latest
-      container:
-        image: mcr.microsoft.com/playwright:v1.54.0-noble
-        options: --user 1001
-      steps:
-        - name: 📦 Checkout Repository
-          uses: actions/checkout@v4
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.54.0-noble
+      options: --user 1001
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
 
-        - name: ⚙️ Enable Corepack
-          run: corepack enable
+      - name: ⚙️ Enable Corepack
+        run: corepack enable
 
-        - name: ⚙️ Setup Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version-file: .nvmrc
-            cache: "pnpm"
-            cache-dependency-path: "pnpm-lock.yaml"
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
-        - name: 📦 Install dependencies
-          run: pnpm install --frozen-lockfile
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
-        - name: 🔍 Test
-          run: pnpm run test:ci
+      - name: 🔍 Test
+        run: pnpm run test:ci
 
-    preview:
-      needs: setup
-      runs-on: ubuntu-latest
-      steps:
-        - name: 📦 Checkout Repository
-          uses: actions/checkout@v4
+  preview:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
 
-        - name: ⚙️ Enable Corepack
-          run: corepack enable
-        
-        - name: ⚙️ Setup Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version-file: .nvmrc
-            cache: "pnpm"
-            cache-dependency-path: "pnpm-lock.yaml"
+      - name: ⚙️ Enable Corepack
+        run: corepack enable
+      
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
-        - name: 📦 Install dependencies
-          run: pnpm install --frozen-lockfile
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
-        - name: 📦 Install Vercel CLI
-          run: pnpm install --global vercel@latest
-        
-        - name: 🔍 Pull Vercel Environment Information
-          run: vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }}
-        
-        - name: 🔍 Build Project Artifacts
-          run: vercel build --token=${{ env.VERCEL_TOKEN }}
-        
-        - name: 🚀 Deploy Project Artifacts to Vercel
-          run: vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}
+      - name: 📦 Install Vercel CLI
+        run: pnpm install --global vercel@latest
+      
+      - name: 🔍 Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }}
+      
+      - name: 🔍 Build Project Artifacts
+        run: vercel build --token=${{ env.VERCEL_TOKEN }}
+      
+      - name: 🚀 Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}

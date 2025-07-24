@@ -12,9 +12,9 @@ on:
       - main
 
 jobs:
-  setup:
+  deploy:
     runs-on: ubuntu-latest
-    deploy:
+    steps:
       needs: setup
       runs-on: ubuntu-latest
       steps:
