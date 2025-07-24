@@ -1,11 +1,10 @@
-import { decodePackageName } from "@/lib/decodePackageName";
 import type { PackageVersion } from "@/types/package";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ package_name: string[] }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ package_name: string }> }) {
   try {
     const { package_name } = await params;
-    const packageName = decodePackageName(package_name);
+    const packageName = decodeURIComponent(package_name);
 
     if (!packageName || packageName.trim() === "") {
       return NextResponse.json({ error: "Package name is required" }, { status: 400 });
