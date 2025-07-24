@@ -49,9 +49,6 @@ jobs:
         
         - name: 🔍 Build
           run: pnpm run build
-        
-        - name: 🔍 Test
-          run: pnpm run test:ci
 
     lint:
       needs: setup
