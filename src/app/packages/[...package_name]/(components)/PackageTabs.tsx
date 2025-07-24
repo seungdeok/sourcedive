@@ -16,9 +16,8 @@ const PackageFileDependencyTab = lazy(() => import("./PackageFileDependencyTab")
 
 export function PackageTabs({ packageName, metadata }: Props) {
   return (
-    <Tabs defaultValue="overview">
+    <Tabs defaultValue="files">
       <TabsList>
-        <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="files">Files</TabsTrigger>
         <TabsTrigger value="dependencies">Dependencies</TabsTrigger>
         <TabsTrigger value="file-dependencies">File Dependencies</TabsTrigger>
