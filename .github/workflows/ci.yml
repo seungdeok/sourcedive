@@ -107,8 +107,6 @@ jobs:
   preview:
     needs: setup
     runs-on: ubuntu-latest
-    outputs:
-      preview_url: ${{ steps.preview.outputs.preview_url }}
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
@@ -133,14 +131,4 @@ jobs:
         run: npx vercel build --token=${{ env.VERCEL_TOKEN }}
       
       - name: 🚀 Deploy Project Artifacts to Vercel
-        id: deploy
-        run: |
-          URL=$(npx vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }} )
-          echo "preview_url=$URL" >> $GITHUB_OUTPUT
-      
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v3
-        with:
-          comment-tag: ${{ github.event.number }}
-          message: |
-            🧷 Preview: ${{ needs.preview.outputs.preview_url }}
+        run: npx vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}
