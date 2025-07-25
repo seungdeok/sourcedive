@@ -1,3 +1,5 @@
+"use client";
+
 import type { GitHubItem } from "@/types/github";
 import { AlertCircle, ChevronDown, ChevronRight, ExternalLink, File, Folder, FolderOpen, Loader2 } from "lucide-react";
 import Link from "next/link";
