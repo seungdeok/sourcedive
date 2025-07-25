@@ -1,3 +1,5 @@
+"use client";
+
 import type { PackageSize } from "@/types/package";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
