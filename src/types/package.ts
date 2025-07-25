@@ -68,7 +68,7 @@ export type PackageVersion = {
         url: string;
       };
   gitHead?: string;
-  bugs?: string | { url?: string; email?: string };
+  bugs?: string | { url: string; email?: string };
 };
 
 export type PackageMetadata = {
