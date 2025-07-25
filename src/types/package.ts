@@ -103,3 +103,28 @@ export type PackageMetadata = {
       };
   bugs?: string | { url?: string; email?: string };
 };
+
+export type PackageSize = {
+  assets: {
+    gzip: number;
+    name: string;
+    size: number;
+    type: string;
+  }[];
+  dependencyCount: number;
+  dependencySizes: {
+    approximateSize: number;
+    name: string;
+  }[];
+  description: string;
+  gzip: number;
+  hasJSModule: boolean;
+  hasJSNext: boolean;
+  hasSideEffects: boolean;
+  isModuleType: boolean;
+  name: string;
+  repository: string;
+  scoped: boolean;
+  size: number;
+  version: string;
+};

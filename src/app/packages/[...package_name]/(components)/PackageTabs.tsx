@@ -3,11 +3,11 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense, lazy } from "react";
-import type { PackageMetadata } from "../../../../types/package";
+import type { PackageVersion } from "../../../../types/package";
 
 type Props = {
   packageName: string;
-  metadata: PackageMetadata;
+  metadata: PackageVersion;
 };
 
 const PackageFileTab = lazy(() => import("./PackageFileTab"));
