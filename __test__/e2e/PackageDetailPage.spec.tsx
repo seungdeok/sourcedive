@@ -59,6 +59,20 @@ test("패키지 상세 페이지 > 탭 메뉴를 클릭하면 해당 탭 내용�
   await expect(page.getByText("파일 의존성 그래프")).toBeVisible();
 });
 
+test("패키지 상세 페이지 > 파일 뷰어의 파일 목록을 표시합니다.", async ({ page }) => {
+  // given: package 상세 페이지에 접속한다
+  await page.goto("/packages/react");
+  await page.waitForSelector("[role=tablist]");
+
+  const filesTab = page.getByRole("tab", { name: "Files", exact: true });
+  await filesTab.click();
+
+  // then: 파일 목록이 표시된다
+  await expect(page.getByText("파일 뷰어")).toBeVisible();
+  await expect(page.getByText("README.md")).toBeVisible();
+  await expect(page.getByText("package.json")).toBeVisible();
+});
+
 test("패키지 상세 페이지 > 의존성 패키지 목록을 표시합니다.", async ({ page }) => {
   // given: package 상세 페이지에 접속한다
   await page.goto("/packages/react");
