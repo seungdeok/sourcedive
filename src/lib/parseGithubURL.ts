@@ -23,7 +23,7 @@ export function parseGithubURL(url: string): { owner: string; repo: string } | n
   ];
 
   for (const pattern of patterns) {
-    const match = url.trim().match(pattern);
+    const match = url?.trim().match(pattern);
     if (match) {
       return {
         owner: match[1],
