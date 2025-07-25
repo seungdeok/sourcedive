@@ -82,3 +82,15 @@ test("Github Repository 상세 페이지 > 의존성 패키지 목록을 표시�
   const chartTexts = page.locator("text.bb-text");
   await expect(chartTexts.filter({ hasText: /^react \d+\.\d+%$/ })).toBeVisible();
 });
+
+test("Github Repository 상세 페이지 > 파일 의존성 그래프를 표시합니다.", async ({ page }) => {
+  // given: github repository 상세 페이지에 접속한다
+  await page.goto("/github/facebook/react");
+  await page.waitForSelector("[role=tablist]");
+
+  const fileDependenciesTab = page.getByRole("tab", { name: "File Dependencies", exact: true });
+  await fileDependenciesTab.click();
+
+  // then: 파일 의존성 그래프가 표시된다
+  await expect(page.getByText("파일 의존성 그래프")).toBeVisible();
+});
