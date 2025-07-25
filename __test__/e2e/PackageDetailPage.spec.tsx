@@ -49,7 +49,7 @@ test("패키지 상세 페이지 > 탭 메뉴를 클릭하면 해당 탭 내용�
   await expect(dependenciesTab).toHaveAttribute("aria-selected", "true");
 
   // then: package.json 기준 의존성 그래프가 표시된다
-  await expect(page.getByText("package.json 기준 의존성 그래프")).toBeVisible();
+  await expect(page.getByText("Dependency 조합")).toBeVisible();
 
   // when: 탭 메뉴를 클릭하면 해당 탭 내용이 표시된다
   await fileDependenciesTab.click();
@@ -57,4 +57,20 @@ test("패키지 상세 페이지 > 탭 메뉴를 클릭하면 해당 탭 내용�
 
   // then: 파일 의존성 그래프가 표시된다
   await expect(page.getByText("파일 의존성 그래프")).toBeVisible();
+});
+
+test("패키지 상세 페이지 > 의존성 패키지 목록을 표시합니다.", async ({ page }) => {
+  // given: package 상세 페이지에 접속한다
+  await page.goto("/packages/react");
+  await page.waitForSelector("[role=tablist]");
+
+  const dependenciesTab = page.getByRole("tab", { name: "Dependencies", exact: true });
+  await dependenciesTab.click();
+
+  // then: package.json 기준 의존성 그래프가 표시된다
+  await expect(page.getByText("Dependency 조합")).toBeVisible();
+
+  // then: 의존성 패키지가 표시된다
+  const chartTexts = page.locator("text.bb-text");
+  await expect(chartTexts.filter({ hasText: /^react \d+\.\d+%$/ })).toBeVisible();
 });
