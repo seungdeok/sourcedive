@@ -10,7 +10,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Github repository name is required" }, { status: 400 });
     }
 
-    const response = await fetch(`https://api.github.com/repos/${github_repo}`);
+    const response = await fetch(`https://api.github.com/repos/${github_repo}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        Accept: "application/vnd.github+json",
+      },
+    });
 
     if (!response.ok) {
       if (response.status === 404) {
