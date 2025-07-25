@@ -38,6 +38,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/api/github/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=3600",
+          },
+        ],
+      },
     ];
   },
 };
