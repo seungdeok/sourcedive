@@ -1,6 +1,7 @@
 import type { GitHubRepo } from "@/types/github";
 import { notFound } from "next/navigation";
 import { GithubRepoHeader } from "./GithubRepoHeader";
+import { GithubRepoTabs } from "./GithubRepoTabs";
 
 type Props = {
   githubRepo: string;
@@ -12,6 +13,7 @@ export async function GithubRepoDetail({ githubRepo }: Props) {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <GithubRepoHeader metadata={metadata} />
+      <GithubRepoTabs githubRepo={githubRepo} metadata={metadata} />
     </div>
   );
 }
