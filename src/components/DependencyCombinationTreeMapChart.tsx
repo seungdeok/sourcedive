@@ -40,8 +40,7 @@ export function DependencyCombinationTreeMapChart({ packageName }: { packageName
 
 async function getPackageDependencySizes(packageName: string): Promise<PackageSize> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}/size`,
-    { next: { revalidate: 3600 } }
+    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}/size`
   );
 
   if (response.status === 404) {

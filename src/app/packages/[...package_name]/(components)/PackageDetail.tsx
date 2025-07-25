@@ -20,8 +20,7 @@ export async function PackageDetail({ packageName }: Props) {
 
 async function getPackageJSON(packageName: string): Promise<PackageVersion> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}`,
-    { next: { revalidate: 3600 } }
+    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}`
   );
 
   if (response.status === 404) {
