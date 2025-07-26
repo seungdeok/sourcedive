@@ -2,7 +2,7 @@ import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
 import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { MainTabs } from "./(components)/MainTabs";
+import { MainTabs } from "./_components/MainTabs";
 
 export const metadata: Metadata = {
   title: "패키지 조회",

@@ -5,7 +5,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { PackageDetail } from "./(components)/PackageDetail";
+import { PackageDetail } from "./_components/PackageDetail";
 
 type Props = {
   params: Promise<{ package_name: string[] }>;

@@ -2,9 +2,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import type { PackageVersion } from "@/types/package";
 import { ExternalLink, GithubIcon, Scale, User } from "lucide-react";
 import Link from "next/link";
-import type { PackageVersion } from "../../../../types/package";
 
 type Props = {
   metadata: PackageVersion;

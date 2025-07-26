@@ -1,7 +1,7 @@
 import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
+import type { PackageVersion } from "@/types/package";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import type { PackageVersion } from "../../../../types/package";
 import { PackageHeader } from "./PackageHeader";
 import { PackageTabs } from "./PackageTabs";
 

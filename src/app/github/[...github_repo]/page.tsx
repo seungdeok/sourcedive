@@ -5,7 +5,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { GithubRepoDetail } from "./(components)/GithubRepoDetail";
+import { GithubRepoDetail } from "./_components/GithubRepoDetail";
 
 type Props = {
   params: Promise<{ github_repo: string[] }>;
