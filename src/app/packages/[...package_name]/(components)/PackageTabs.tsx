@@ -2,8 +2,9 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useBrowserParams } from "@/hooks/useBrowserParams";
+import type { PackageVersion } from "@/types/package";
 import { Suspense, lazy } from "react";
-import type { PackageVersion } from "../../../../types/package";
 
 type Props = {
   packageName: string;
@@ -15,8 +16,16 @@ const PackageDependencyTab = lazy(() => import("./PackageDependencyTab"));
 const PackageFileDependencyTab = lazy(() => import("./PackageFileDependencyTab"));
 
 export function PackageTabs({ packageName, metadata }: Props) {
+  const { params, updateParams } = useBrowserParams();
+
+  const value = params.tab ?? "";
+
+  const handleTabChange = (value: string) => {
+    updateParams({ tab: value });
+  };
+
   return (
-    <Tabs defaultValue="files">
+    <Tabs value={value} onValueChange={handleTabChange}>
       <TabsList>
         <TabsTrigger value="files">Files</TabsTrigger>
         <TabsTrigger value="dependencies">Dependencies</TabsTrigger>
