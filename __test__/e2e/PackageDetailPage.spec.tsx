@@ -34,7 +34,7 @@ test("패키지 상세 페이지 > 탭 메뉴를 클릭하면 해당 탭 내용�
   const filesTab = page.getByRole("tab", { name: "Files", exact: true });
   const dependenciesTab = page.getByRole("tab", { name: "Dependencies", exact: true });
   const fileDependenciesTab = page.getByRole("tab", { name: "File Dependencies", exact: true });
-  await expect(filesTab).toHaveAttribute("aria-selected", "true");
+  await expect(filesTab).toHaveAttribute("aria-selected", "false");
   await expect(dependenciesTab).toHaveAttribute("aria-selected", "false");
   await expect(fileDependenciesTab).toHaveAttribute("aria-selected", "false");
 
@@ -61,11 +61,11 @@ test("패키지 상세 페이지 > 탭 메뉴를 클릭하면 해당 탭 내용�
 
 test("패키지 상세 페이지 > 파일 뷰어의 파일 목록을 표시합니다.", async ({ page }) => {
   // given: package 상세 페이지에 접속한다
-  await page.goto("/packages/react");
+  await page.goto("/packages/react?tab=files");
   await page.waitForSelector("[role=tablist]");
 
   const filesTab = page.getByRole("tab", { name: "Files", exact: true });
-  await filesTab.click();
+  await expect(filesTab).toHaveAttribute("aria-selected", "true");
 
   // then: 파일 목록이 표시된다
   await expect(page.getByText("파일 뷰어")).toBeVisible();
@@ -75,11 +75,11 @@ test("패키지 상세 페이지 > 파일 뷰어의 파일 목록을 표시합�
 
 test("패키지 상세 페이지 > 의존성 패키지 목록을 표시합니다.", async ({ page }) => {
   // given: package 상세 페이지에 접속한다
-  await page.goto("/packages/react");
+  await page.goto("/packages/react?tab=dependencies");
   await page.waitForSelector("[role=tablist]");
 
   const dependenciesTab = page.getByRole("tab", { name: "Dependencies", exact: true });
-  await dependenciesTab.click();
+  await expect(dependenciesTab).toHaveAttribute("aria-selected", "true");
 
   // then: package.json 기준 의존성 그래프가 표시된다
   await expect(page.getByText("Dependency 조합")).toBeVisible();
@@ -91,11 +91,11 @@ test("패키지 상세 페이지 > 의존성 패키지 목록을 표시합니다
 
 test("패키지 상세 페이지 > 파일 의존성 그래프를 표시합니다.", async ({ page }) => {
   // given: package 상세 페이지에 접속한다
-  await page.goto("/packages/react");
+  await page.goto("/packages/react?tab=file-dependencies");
   await page.waitForSelector("[role=tablist]");
 
   const fileDependenciesTab = page.getByRole("tab", { name: "File Dependencies", exact: true });
-  await fileDependenciesTab.click();
+  await expect(fileDependenciesTab).toHaveAttribute("aria-selected", "true");
 
   // then: 파일 의존성 그래프가 표시된다
   await expect(page.getByText("파일 의존성 그래프")).toBeVisible();
