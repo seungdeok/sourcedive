@@ -1,5 +1,7 @@
+import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
 import type { GitHubRepo } from "@/types/github";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { GithubRepoHeader } from "./GithubRepoHeader";
 import { GithubRepoTabs } from "./GithubRepoTabs";
 
@@ -13,7 +15,9 @@ export async function GithubRepoDetail({ githubRepo }: Props) {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <GithubRepoHeader metadata={metadata} />
-      <GithubRepoTabs githubRepo={githubRepo} metadata={metadata} />
+      <Suspense fallback={<GlobalLoadingFallback />}>
+        <GithubRepoTabs githubRepo={githubRepo} metadata={metadata} />
+      </Suspense>
     </div>
   );
 }

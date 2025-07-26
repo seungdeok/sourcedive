@@ -1,4 +1,6 @@
+import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import type { PackageVersion } from "../../../../types/package";
 import { PackageHeader } from "./PackageHeader";
 import { PackageTabs } from "./PackageTabs";
@@ -13,7 +15,9 @@ export async function PackageDetail({ packageName }: Props) {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <PackageHeader metadata={metadata} />
-      <PackageTabs packageName={packageName} metadata={metadata} />
+      <Suspense fallback={<GlobalLoadingFallback />}>
+        <PackageTabs packageName={packageName} metadata={metadata} />
+      </Suspense>
     </div>
   );
 }
