@@ -17,6 +17,6 @@ test("메인 페이지 > 외부 파일 > 외부 파일 사용 가이드가 표�
   // then: CLI 가이드가(제목, 링크) 표시된다
   await expect(page.getByText("외부 파일 사용 가이드")).toBeVisible();
   await expect(page.getByText("CLI 사용 가이드")).toBeVisible();
-  await expect(page.getByText("npx sourcedive -o {outputDirectory} -f {filePath}")).toBeVisible();
+  await expect(page.getByText("npx sourcedive -o {outputDirectory} -f {entryFile}")).toBeVisible();
   await expect(page.getByRole("link", { name: "문서 보기" })).toBeVisible();
 });
