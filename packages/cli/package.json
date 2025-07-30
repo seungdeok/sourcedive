@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "sourcedive-cli",
+  "version": "0.1.0",
+  "description": "Sourcedive Analyzer CLI",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "sourcedive": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "dpdm": "^3.14.0",
+    "meow": "^13.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5",
+    "tsup": "^8.3.5"
+  },
+  "keywords": [
+    "sourcedive",
+    "analyzer",
+    "cli"
+  ],
+  "author": "seungdeok <akk9132@naver.com>",
+  "license": "MIT"
+}
