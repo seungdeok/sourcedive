@@ -1,6 +1,6 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github, Info, Terminal } from "lucide-react";
+import { ExternalLink, Github, Info, Package, Terminal } from "lucide-react";
 import Link from "next/link";
 
 export default function ExternalTab() {
@@ -27,15 +27,15 @@ export default function ExternalTab() {
                   <div className="space-y-1">
                     <div className="text-gray-400"># npm</div>
                     <div className="bg-gray-800 p-2 rounded-md text-sm">
-                      {"npx sourcedive -o {outputDirectory} -f {filePath}"}
+                      {"npx sourcedive -o {outputDirectory} -f {entryFile}"}
                     </div>
                     <div className="text-gray-400 mt-2"># yarn</div>
                     <div className="bg-gray-800 p-2 rounded-md text-sm">
-                      {"yarn dlx sourcedive -o {outputDirectory} -f {filePath}"}
+                      {"yarn dlx sourcedive -o {outputDirectory} -f {entryFile}"}
                     </div>
                     <div className="text-gray-400 mt-2"># pnpm</div>
                     <div className="bg-gray-800 p-2 rounded-md text-sm">
-                      {"pnpm dlx sourcedive -o {outputDirectory} -f {filePath}"}
+                      {"pnpm dlx sourcedive -o {outputDirectory} -f {entryFile}"}
                     </div>
                   </div>
                 </div>
@@ -46,14 +46,12 @@ export default function ExternalTab() {
                 <div className="bg-gray-900 text-gray-100 pt-3 pl-3 pr-3 rounded-md font-mono text-sm space-y-1">
                   <div className="text-gray-400"># React 프로젝트의 특정 컴포넌트 분석</div>
                   <div className="bg-gray-800 p-2 rounded-md text-sm">
-                    {"npx sourcedive -o react -f src/components/Header.jsx"}
+                    {"npx sourcedive -o {outputDirectory} -f src/components/Header.jsx"}
                   </div>
                   <div className="text-gray-400 mt-2"># Node.js 서버 파일 분석</div>
                   <div className="bg-gray-800 p-2 rounded-md text-sm">
-                    {"npx sourcedive -o nodejs -f server/app.js"}
+                    {"npx sourcedive -o {outputDirectory} -f server/app.js"}
                   </div>
-                  <div className="text-gray-400 mt-2"># 전체 디렉토리 분석</div>
-                  <div className="bg-gray-800 p-2 rounded-md text-sm">{"npx sourcedive -o myproject -f src/"}</div>
                 </div>
               </div>
             </div>
@@ -77,12 +75,12 @@ export default function ExternalTab() {
             className="cursor-pointer flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-colors duration-200 font-medium"
             type="button"
           >
-            <Github size={18} />
-            GitHub
+            <Package size={18} />
+            NPM 패키지
           </Button>
         </Link>
 
-        <Link href="https://github.com/seungdeok/sourcedive/blob/main/README.md" target="_blank">
+        <Link href="https://github.com/seungdeok/sourcedive/blob/main/packages/cli/README.md" target="_blank">
           <Button
             className="cursor-pointer flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-colors duration-200 font-medium"
             type="button"
