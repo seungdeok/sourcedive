@@ -70,7 +70,7 @@ export default function ExternalTab() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
-        <Link href="https://github.com/seungdeok/sourcedive" target="_blank">
+        <Link href="https://www.npmjs.com/package/sourcedive" target="_blank">
           <Button
             className="cursor-pointer flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-colors duration-200 font-medium"
             type="button"
