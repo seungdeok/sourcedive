@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package",
-  "name": "sourcedive-cli",
+  "name": "sourcedive",
   "version": "0.1.0",
   "description": "Sourcedive Analyzer CLI",
   "main": "./dist/index.js",
