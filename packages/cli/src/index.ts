@@ -1,5 +1,8 @@
+import { writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import chalk from "chalk";
 import meow from "meow";
+import { analyzeDependencies } from "./analyze";
 
 const cli = meow(
   `
@@ -40,19 +43,24 @@ const cli = meow(
 );
 
 async function main() {
-  const entryFile = cli.flags.file;
-  if (!entryFile) {
-    console.error(chalk.red("❌ Error: entry file을 입력해주세요"));
-    cli.showHelp();
-    process.exit(1);
-  }
   const options = {
     output: cli.flags.output,
     file: cli.flags.file,
     verbose: cli.flags.verbose,
   };
+  if (!options.file) {
+    console.error(chalk.red("❌ Error: entry file을 입력해주세요"));
+    cli.showHelp();
+    process.exit(1);
+  }
   try {
-    console.log(chalk.cyan(`🔍 Analyzing dependencies in: ${entryFile}`));
+    console.log(chalk.cyan(`🔍 Analyzing dependencies in: ${options.file}`));
+    const { dependencies } = await analyzeDependencies(options.file, options);
+
+    const outputDir = options.output ?? process.cwd();
+    const outputPath = join(outputDir, "dependencies.json");
+    await writeFile(outputPath, JSON.stringify(dependencies, null, 2));
+    console.log(chalk.green(`✅ Dependencies saved to: ${outputPath}`));
   } catch (error) {
     console.error(chalk.red("💥 Error:"), error instanceof Error ? error.message : error);
     if (options.verbose && error instanceof Error) {
