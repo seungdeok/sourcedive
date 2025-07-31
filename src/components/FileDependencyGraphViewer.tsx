@@ -194,20 +194,6 @@ export function FileDependencyGraphViewer({
       });
   }, [entryFile, githubRepo]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
-        <div className="text-center">
-          <div
-            className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"
-            data-testid="loading-spinner"
-          />
-          <p className="text-gray-600">loading...</p>
-        </div>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex items-center justify-center h-96 bg-red-50 rounded-lg">
@@ -228,8 +214,20 @@ export function FileDependencyGraphViewer({
         </p>
       </div>
 
-      <div className="border rounded-lg bg-white p-4">
-        <svg ref={svgRef} className="w-full" style={{ maxWidth: "100%" }} data-testid="dependency-graph" />
+      <div className="border rounded-lg bg-white p-4 relative">
+        {isLoading ? (
+          <div className="flex items-center justify-center h-96">
+            <div className="text-center">
+              <div
+                className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"
+                data-testid="loading-spinner"
+              />
+              <p className="text-gray-600">loading...</p>
+            </div>
+          </div>
+        ) : (
+          <svg ref={svgRef} className="w-full h-full" data-testid="dependency-graph" />
+        )}
       </div>
     </div>
   );
