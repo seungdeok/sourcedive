@@ -184,7 +184,11 @@ export function FileDependencyGraphViewer({
       .then(res => res.json())
       .then(data => {
         const dependencies = data.dependencies || {};
-        drawGraph(dependencies);
+        if (Object.keys(dependencies).length > 0) {
+          drawGraph(dependencies);
+        } else {
+          setError("No dependencies");
+        }
       })
       .catch(err => {
         setError(err.message);
@@ -215,7 +219,7 @@ export function FileDependencyGraphViewer({
       </div>
 
       <div className="border rounded-lg bg-white p-4 relative">
-        {isLoading ? (
+        {isLoading && (
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <div
@@ -225,9 +229,8 @@ export function FileDependencyGraphViewer({
               <p className="text-gray-600">loading...</p>
             </div>
           </div>
-        ) : (
-          <svg ref={svgRef} className="w-full h-full" data-testid="dependency-graph" />
         )}
+        <svg ref={svgRef} className="w-full h-full" data-testid="dependency-graph" />
       </div>
     </div>
   );
