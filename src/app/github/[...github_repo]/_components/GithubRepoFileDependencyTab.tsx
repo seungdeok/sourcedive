@@ -1,10 +1,12 @@
+import { FileDependencyViewer } from "@/components/FileDependencyViewer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type Props = {
+  githubRepo: string;
   packageName: string;
 };
 
-export default function GithubRepoFileDependencyTab({ packageName }: Props) {
+export default function GithubRepoFileDependencyTab({ githubRepo, packageName }: Props) {
   return (
     <div className="space-y-6">
       <Card>
@@ -12,7 +14,7 @@ export default function GithubRepoFileDependencyTab({ packageName }: Props) {
           <CardTitle>파일 의존성 그래프</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-96 border rounded-lg flex items-center justify-center">(구현 예정)</div>
+          <FileDependencyViewer githubRepo={githubRepo} packageName={packageName} />
         </CardContent>
       </Card>
     </div>
