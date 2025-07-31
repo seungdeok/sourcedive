@@ -45,7 +45,7 @@ export function GithubRepoTabs({ githubRepo, metadata }: Props) {
 
       <TabsContent value="file-dependencies" className="mt-6">
         <Suspense fallback={<LoadingFallback />}>
-          <GithubRepoFileDependencyTab packageName={metadata.name} />
+          <GithubRepoFileDependencyTab githubRepo={githubRepo} packageName={metadata.name} />
         </Suspense>
       </TabsContent>
     </Tabs>

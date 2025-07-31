@@ -1,5 +1,3 @@
-"use client";
-
 import { TreeFilesViewer } from "@/components/TreeFilesViewer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
