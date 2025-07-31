@@ -46,7 +46,7 @@ export function PackageTabs({ packageName, metadata }: Props) {
 
       <TabsContent value="file-dependencies" className="mt-6">
         <Suspense fallback={<LoadingFallback />}>
-          <PackageFileDependencyTab packageName={packageName} />
+          <PackageFileDependencyTab githubRepo={getGithubRepo(metadata.repository)} packageName={packageName} />
         </Suspense>
       </TabsContent>
     </Tabs>
@@ -75,4 +75,11 @@ function LoadingFallback() {
       </Card>
     </div>
   );
+}
+
+function getGithubRepo(repository?: string | { type: string; url: string; directory?: string }) {
+  if (!repository) return "";
+  const url = typeof repository === "string" ? repository : repository.url;
+  const githubMatch = url.match(/^(?:git\+)?https:\/\/github\.com\/([^\/]+\/[^\/]+?)(?:\.git)?(?:\/.*)?$/);
+  return githubMatch ? githubMatch[1] : "";
 }
