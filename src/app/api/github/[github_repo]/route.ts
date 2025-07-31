@@ -2,15 +2,16 @@
 import type { PackageVersion } from "@/types/package";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ github_repo: string[] }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ github_repo: string }> }) {
   try {
     const { github_repo } = await params;
+    const githubRepo = decodeURIComponent(github_repo);
 
-    if (!github_repo) {
+    if (!githubRepo) {
       return NextResponse.json({ error: "Github repository name is required" }, { status: 400 });
     }
 
-    const response = await fetch(`https://api.github.com/repos/${github_repo}`, {
+    const response = await fetch(`https://api.github.com/repos/${githubRepo}`, {
       headers: {
         Authorization: `Bearer ${process.env.GH_TOKEN}`,
         Accept: "application/vnd.github+json",
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     if (!response.ok) {
       if (response.status === 404) {
-        return NextResponse.json({ error: `Github repository "${github_repo}" not found` }, { status: 404 });
+        return NextResponse.json({ error: `Github repository "${githubRepo}" not found` }, { status: 404 });
       }
 
       throw new Error(`Github API returned ${response.status}`);
