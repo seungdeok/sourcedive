@@ -1,13 +1,11 @@
-import { exec } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { promisify } from "node:util";
 import { SUPPORTED_FILE_EXTENSIONS } from "@/configs/support";
 import { type DependencyTree, parseDependencyTree } from "dpdm";
+import git from "isomorphic-git";
+import http from "isomorphic-git/http/node";
 import { type NextRequest, NextResponse } from "next/server";
-
-const execAsync = promisify(exec);
 
 export async function GET(request: NextRequest) {
   try {
@@ -68,7 +66,21 @@ async function analyzeRepository(entryFileUrl: string, githubRepo: string) {
 
     // Git clone
     const cloneUrl = `https://github.com/${owner}/${repo}.git`;
-    await execAsync(`git clone --depth 1 --branch ${branch} "${cloneUrl}" "${tempRepoPath}"`, { timeout: 30000 });
+    await git.clone({
+      fs,
+      http,
+      dir: tempRepoPath,
+      url: cloneUrl,
+      ref: branch,
+      singleBranch: true,
+      depth: 1,
+      ...(process.env.GH_TOKEN && {
+        onAuth: () => ({
+          username: process.env.GH_TOKEN,
+          password: "x-oauth-basic",
+        }),
+      }),
+    });
 
     const absoluteEntryPath = path.join(tempRepoPath, filePath);
     if (!fs.existsSync(absoluteEntryPath)) {
@@ -113,7 +125,7 @@ async function analyzeRepository(entryFileUrl: string, githubRepo: string) {
 
     if (tempRepoPath && fs.existsSync(tempRepoPath)) {
       try {
-        await execAsync(`rm -rf "${tempRepoPath}"`);
+        await removeDirectory(tempRepoPath);
       } catch (cleanupError) {
         console.warn("Failed to cleanup temp repository:", cleanupError);
       }
@@ -133,4 +145,32 @@ function formatDependencyTree(tree: DependencyTree): Record<string, string[]> {
   }
 
   return result;
+}
+
+async function removeDirectory(dirPath: string): Promise<void> {
+  if (!fs.existsSync(dirPath)) return;
+
+  const files = fs.readdirSync(dirPath);
+
+  for (const file of files) {
+    const filePath = path.join(dirPath, file);
+
+    try {
+      const stat = fs.statSync(filePath);
+
+      if (stat.isDirectory()) {
+        await removeDirectory(filePath);
+      } else {
+        fs.unlinkSync(filePath);
+      }
+    } catch (error) {
+      console.warn(`Failed to remove ${filePath}:`, error);
+    }
+  }
+
+  try {
+    fs.rmdirSync(dirPath);
+  } catch (error) {
+    console.warn(`Failed to remove directory ${dirPath}:`, error);
+  }
 }
