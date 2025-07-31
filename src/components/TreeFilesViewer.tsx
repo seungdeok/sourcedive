@@ -13,7 +13,10 @@ type TreeNodeData = {
   isLoading: boolean;
 };
 
-export function TreeFilesViewer({ packageName }: { packageName: string }) {
+export function TreeFilesViewer({
+  packageName,
+  onSelectFile,
+}: { packageName: string; onSelectFile?: (node: GitHubItem) => void }) {
   const [treeData, setTreeData] = useState<TreeNodeData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -132,7 +135,15 @@ export function TreeFilesViewer({ packageName }: { packageName: string }) {
       ) : (
         <div className="max-h-96 overflow-auto">
           {treeData.length > 0 ? (
-            treeData.map(node => <TreeNode key={node.node.path} node={node} level={0} onToggle={handleToggle} />)
+            treeData.map(node => (
+              <TreeNode
+                key={node.node.path}
+                node={node}
+                level={0}
+                onToggle={handleToggle}
+                onSelectFile={onSelectFile}
+              />
+            ))
           ) : (
             <div className="p-8 text-center text-gray-500">
               <Folder className="w-12 h-12 mx-auto mb-3 text-gray-300" />
@@ -149,7 +160,8 @@ const TreeNode: React.FC<{
   node: TreeNodeData;
   level: number;
   onToggle: (node: TreeNodeData) => void;
-}> = ({ node, level, onToggle }) => {
+  onSelectFile?: (node: GitHubItem) => void;
+}> = ({ node, level, onToggle, onSelectFile }) => {
   const isDirectory = node.isDirectory;
   const hasChildren = node.children.length > 0;
   const canExpand = isDirectory && (!node.isLoading || hasChildren);
@@ -202,6 +214,17 @@ const TreeNode: React.FC<{
         <span className="flex-1 truncate">
           {isDirectory ? (
             node.node.name
+          ) : onSelectFile ? (
+            <div
+              className="hover:text-blue-600 hover:underline flex items-center gap-1"
+              onClick={e => {
+                e.stopPropagation();
+                onSelectFile?.(node.node);
+              }}
+            >
+              {node.node.name}
+              <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
           ) : (
             <Link
               href={node.node.html_url}
@@ -219,7 +242,13 @@ const TreeNode: React.FC<{
       {isDirectory && node.isExpanded && node.children && (
         <div>
           {node.children.map((child: TreeNodeData) => (
-            <TreeNode key={child.node.path || child.node.name} node={child} level={level + 1} onToggle={onToggle} />
+            <TreeNode
+              key={child.node.path || child.node.name}
+              node={child}
+              level={level + 1}
+              onToggle={onToggle}
+              onSelectFile={onSelectFile}
+            />
           ))}
         </div>
       )}
