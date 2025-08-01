@@ -1,16 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Form, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useBrowserParams } from "@/hooks/useBrowserParams";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSearchHistory } from "../_hooks/useSearchHistory";
-import RecentSearch from "./RecentSearch";
 
 const packageNameSchema = z
   .string()
@@ -32,21 +32,17 @@ export default function SearchTab() {
       packageName: params.packageName ?? "",
     },
   });
-  const { get, add, remove } = useSearchHistory({ maxItems: 5, storageKey: "npm_search_history" });
-  const [recentSearches, setRecentSearches] = useState<string[]>(get());
+  const { get, add } = useSearchHistory({ maxItems: 5, storageKey: "npm_search_history" });
+  const recentKeywords = get();
+  const [open, setOpen] = useState(false);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     add(values.packageName);
     router.push(`/packages/${values.packageName}`);
   }
 
-  const handleRecentSearchClick = (packageName: string) => {
-    router.push(`/packages/${packageName}`);
-  };
-
-  const handleRemoveRecentSearch = (packageName: string) => {
-    remove(packageName);
-    setRecentSearches(get());
+  const handleClickKeyword = (keyword: string) => {
+    router.push(`/packages/${keyword}`);
   };
 
   return (
@@ -60,10 +56,38 @@ export default function SearchTab() {
               <FormItem>
                 <FormLabel>Package Name</FormLabel>
                 <div className="flex gap-2">
-                  <FormControl>
-                    <Input placeholder="패키지명을 입력해주세요" {...field} />
-                  </FormControl>
-                  <Button type="submit" className="self-end h-[36px]">
+                  <div className="flex-1 relative">
+                    <Command className="rounded-lg border">
+                      <CommandInput
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        placeholder="패키지명을 입력해주세요"
+                        onFocus={() => setOpen(true)}
+                        onBlur={() => setTimeout(() => setOpen(false), 200)}
+                      />
+                      {open && recentKeywords.length > 0 && (
+                        <CommandList>
+                          <CommandEmpty>검색 결과가 없습니다.</CommandEmpty>
+                          <CommandGroup heading="최근 검색어">
+                            {recentKeywords.map(keyword => (
+                              <CommandItem
+                                key={keyword}
+                                value={keyword}
+                                onSelect={() => handleClickKeyword(keyword)}
+                                className="flex items-center justify-between cursor-pointer"
+                              >
+                                <div className="flex items-center">
+                                  <Clock className="mr-2 h-4 w-4" />
+                                  <span>{keyword}</span>
+                                </div>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      )}
+                    </Command>
+                  </div>
+                  <Button type="submit" className="self-start h-[36px]">
                     🔍 검색
                   </Button>
                 </div>
@@ -74,11 +98,6 @@ export default function SearchTab() {
           />
         </form>
       </Form>
-      <RecentSearch
-        recentSearches={recentSearches}
-        onClickRecentSearch={handleRecentSearchClick}
-        onClickRemoveRecentSearch={handleRemoveRecentSearch}
-      />
     </div>
   );
 }
