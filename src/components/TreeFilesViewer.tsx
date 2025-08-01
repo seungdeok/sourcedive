@@ -127,7 +127,7 @@ export function TreeFilesViewer({
   }, [loadDirectory]);
 
   return (
-    <div className="border rounded-lg">
+    <div className="border rounded-lg" data-testid="tree-files-viewer">
       {loading ? (
         <LoadingFallback />
       ) : error ? (
