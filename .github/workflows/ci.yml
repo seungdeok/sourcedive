@@ -1,4 +1,4 @@
-name: CI
+name: CLI CI
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
