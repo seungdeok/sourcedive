@@ -79,3 +79,32 @@ test("메인 페이지 > npm 검색 탭 > 존재하는 패키지를 검색하면
   // then: 패키지 상세 페이지에서 패키지 이름이 표시된다
   await expect(page.getByRole("heading", { name: "react" })).toBeVisible();
 });
+
+test("메인 페이지 > npm 검색 탭 > 검색 후 다시 검색 페이지로 이동하면 최근 검색어 목록이 표시된다", async ({
+  page,
+}) => {
+  // given: 메인 페이지에 접속한다
+  await page.goto("/");
+  await page.waitForSelector("[role=tablist]");
+
+  const npmTab = page.getByRole("tab", { name: "🔍 NPM 검색" });
+
+  // when: npm 검색 탭을 클릭하고 존재하는 패키지를 검색한다
+  await npmTab.click();
+  await expect(npmTab).toHaveAttribute("aria-selected", "true");
+  await page.getByPlaceholder("패키지명을 입력해주세요").fill("react");
+
+  // then: npm 검색 버튼을 클릭하면 패키지 상세 페이지로 이동한다
+  await page.getByRole("button", { name: "🔍 검색" }).click();
+  await page.waitForURL("/packages/react");
+  await expect(page).toHaveURL("/packages/react");
+
+  // when: 검색 페이지로 이동한다
+  await page.goBack();
+  await page.waitForSelector("[role=tablist]");
+  await npmTab.click();
+  await expect(npmTab).toHaveAttribute("aria-selected", "true");
+
+  // then: 최근 검색어 목록이 표시된다
+  await expect(page.getByText("react")).toBeVisible();
+});
