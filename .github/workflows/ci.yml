@@ -12,6 +12,8 @@ on:
     types: [opened, synchronize]
     branches:
       - main
+    paths-ignore:
+      - packages/**
 
 jobs:
   setup:
