@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={`${pretendard.variable} antialiased min-h-screen`}>
         <Header />
         <main className="container mx-auto pt-12">{children}</main>
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   );
