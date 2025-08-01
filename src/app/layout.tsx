@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable} antialiased min-h-screen`}>
         <Header />
-        <main className="container mx-auto pt-12">{children}</main>
+        <main className="container mx-auto pt-12 px-4 sm:px-6 lg:px-8">{children}</main>
         {process.env.NODE_ENV === "production" && <Analytics />}
         {process.env.NODE_ENV === "production" && <SpeedInsights />}
       </body>
