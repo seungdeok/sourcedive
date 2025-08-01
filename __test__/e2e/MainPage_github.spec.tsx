@@ -109,3 +109,20 @@ test("메인 페이지 > github 검색 탭 > 검색 후 다시 검색 페이지�
   await page.getByPlaceholder("repository 이름을 입력해주세요").focus();
   await expect(page.getByText("seungdeok/seungdeok")).toBeVisible();
 });
+
+test("메인 페이지 > github 검색 탭 > 검색어 입력 시 추천 검색어 목록이 표시된다", async ({ page }) => {
+  // given: 메인 페이지에 접속한다
+  await page.goto("/");
+  await page.waitForSelector("[role=tablist]");
+
+  const githubTab = page.getByRole("tab", { name: "🔍 Github 검색" });
+
+  // when: github 검색 탭을 클릭한다.
+  await githubTab.click();
+  await expect(githubTab).toHaveAttribute("aria-selected", "true");
+
+  // then: 검색어 입력 시 추천 검색어 목록이 표시된다
+  await page.getByPlaceholder("repository 이름을 입력해주세요").fill("react");
+  await page.getByPlaceholder("repository 이름을 입력해주세요").focus();
+  await expect(page.getByText("reactjs/react.dev")).toBeVisible();
+});

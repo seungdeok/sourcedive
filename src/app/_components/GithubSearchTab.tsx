@@ -1,13 +1,22 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 import { Form, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useBrowserParams } from "@/hooks/useBrowserParams";
+import { useDebounce } from "@/hooks/useDebounce";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useSearchHistory } from "../_hooks/useSearchHistory";
@@ -33,6 +42,8 @@ export default function GithubSearchTab() {
   const { get, add } = useSearchHistory({ maxItems: 5, storageKey: "github_search_history" });
   const recentKeywords = get();
   const [open, setOpen] = useState(false);
+  const debouncedKeyword = useDebounce(form.watch("githubRepo"), 300);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     add(values.githubRepo);
@@ -51,6 +62,16 @@ export default function GithubSearchTab() {
       }
     }
   };
+
+  useEffect(() => {
+    if (debouncedKeyword && debouncedKeyword.length > 1) {
+      fetch(`https://api.github.com/search/repositories?q=${debouncedKeyword}`)
+        .then(res => res.json())
+        .then(data => {
+          setSuggestions(data.items.map((item: { full_name: string }) => item.full_name));
+        });
+    }
+  }, [debouncedKeyword]);
 
   return (
     <div className="space-y-4">
@@ -73,24 +94,44 @@ export default function GithubSearchTab() {
                         onFocus={() => setOpen(true)}
                         onBlur={() => setTimeout(() => setOpen(false), 200)}
                       />
-                      {open && recentKeywords.length > 0 && (
+                      {open && (
                         <CommandList>
                           <CommandEmpty>검색 결과가 없습니다.</CommandEmpty>
-                          <CommandGroup heading="최근 검색어">
-                            {recentKeywords.map(keyword => (
-                              <CommandItem
-                                key={keyword}
-                                value={keyword}
-                                onSelect={() => handleClickKeyword(keyword)}
-                                className="flex items-center justify-between cursor-pointer"
-                              >
-                                <div className="flex items-center">
-                                  <Clock className="mr-2 h-4 w-4" />
-                                  <span>{keyword}</span>
-                                </div>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
+                          {recentKeywords?.length > 0 && (
+                            <CommandGroup heading="최근 검색어">
+                              {recentKeywords.map(keyword => (
+                                <CommandItem
+                                  key={keyword}
+                                  value={keyword}
+                                  onSelect={() => handleClickKeyword(keyword)}
+                                  className="flex items-center justify-between cursor-pointer"
+                                >
+                                  <div className="flex items-center">
+                                    <Clock className="mr-2 h-4 w-4" />
+                                    <span>{keyword}</span>
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          )}
+                          <CommandSeparator />
+                          {suggestions?.length > 0 && (
+                            <CommandGroup heading="추천 검색어">
+                              {suggestions.map(keyword => (
+                                <CommandItem
+                                  key={keyword}
+                                  value={keyword}
+                                  onSelect={() => handleClickKeyword(keyword)}
+                                  className="flex items-center justify-between cursor-pointer"
+                                >
+                                  <div className="flex items-center">
+                                    <Clock className="mr-2 h-4 w-4" />
+                                    <span>{keyword}</span>
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          )}
                         </CommandList>
                       )}
                     </Command>
