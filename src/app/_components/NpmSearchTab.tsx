@@ -45,6 +45,15 @@ export default function SearchTab() {
     router.push(`/packages/${keyword}`);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (form.getValues("packageName")) {
+        form.handleSubmit(onSubmit)();
+      }
+    }
+  };
+
   return (
     <div className="space-y-4">
       <Form {...form}>
@@ -61,6 +70,7 @@ export default function SearchTab() {
                       <CommandInput
                         value={field.value}
                         onValueChange={field.onChange}
+                        onKeyDown={handleKeyDown}
                         placeholder="패키지명을 입력해주세요"
                         onFocus={() => setOpen(true)}
                         onBlur={() => setTimeout(() => setOpen(false), 200)}
