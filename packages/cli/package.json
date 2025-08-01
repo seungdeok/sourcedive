@@ -22,7 +22,8 @@
   },
   "scripts": {
     "build": "tsup",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "test:ci": "vitest run"
   },
   "dependencies": {
     "chalk": "^5.4.1",
@@ -31,7 +32,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
-    "tsup": "^8.3.5"
+    "tsup": "^8.3.5",
+    "vitest": "^3.2.4"
   },
   "keywords": [
     "sourcedive",
