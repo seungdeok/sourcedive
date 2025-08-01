@@ -9,6 +9,10 @@ on:
     paths:
       - packages/cli/**
 
+defaults:
+  run:
+    working-directory: packages/cli
+
 jobs:
   setup:
     runs-on: ubuntu-latest
