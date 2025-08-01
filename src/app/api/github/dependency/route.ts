@@ -137,11 +137,9 @@ function formatDependencyTree(tree: DependencyTree): Record<string, string[]> {
   const result: Record<string, string[]> = {};
 
   for (const [filePath, dependencies] of Object.entries(tree)) {
-    if (dependencies === null) {
-      result[filePath] = [];
-    } else if (Array.isArray(dependencies)) {
-      result[filePath] = dependencies.map(dep => dep.id).filter((id, index, self) => id && self.indexOf(id) === index);
-    }
+    result[filePath] = dependencies
+      ? [...new Set(dependencies.map(dep => dep.id).filter((id): id is string => id != null))]
+      : [];
   }
 
   return result;
