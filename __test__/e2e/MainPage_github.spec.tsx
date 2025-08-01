@@ -15,6 +15,7 @@ test("메인 페이지 > github 검색 탭 > 검색어에 영문 소문자, 숫�
 
   // when: github 검색 탭을 클릭하고 검색어에 영문 소문자, 숫자, 하이픈(-), 언더스코어(_)와 스코프(@scope/)가 아닌 문자를 입력한다
   await githubTab.click();
+  await page.getByPlaceholder("repository 이름을 입력해주세요").clear();
   await page.getByPlaceholder("repository 이름을 입력해주세요").fill("*react");
 
   // then: github 검색 버튼을 클릭하면 owner/repository 형태로 입력해주세요. 라는 메시지가 표시된다
@@ -22,6 +23,7 @@ test("메인 페이지 > github 검색 탭 > 검색어에 영문 소문자, 숫�
   await expect(page.getByText("owner/repository 형태로 입력해주세요.")).toBeVisible();
 
   // when: github 검색 탭을 클릭하고 검색어에 owner/repository 형태로 입력한다
+  await page.getByPlaceholder("repository 이름을 입력해주세요").clear();
   await page.getByPlaceholder("repository 이름을 입력해주세요").fill("seungdeok/sourcedive");
 
   // then: github 검색 버튼을 클릭하면 패키지 상세 페이지로 이동한다
