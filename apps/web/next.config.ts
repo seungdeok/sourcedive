@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   compiler: {
     removeConsole: {
       exclude: process.env.NODE_ENV === "production" ? ["error", "warn"] : ["error", "warn", "log"],
