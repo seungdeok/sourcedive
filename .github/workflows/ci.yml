@@ -128,6 +128,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 📦 Install Playwright
+        working-directory: apps/web
         run: npx playwright install --with-deps
 
       - name: 🔍 Test
