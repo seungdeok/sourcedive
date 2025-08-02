@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
+    "@sourcedive/tsconfig": "workspace:*",
     "tsup": "^8.3.5",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4"
