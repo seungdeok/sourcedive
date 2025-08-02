@@ -1,7 +1,6 @@
 name: CLI CD
 
 env:
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 on:
@@ -17,10 +16,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   setup:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      packages: write
     steps:
       - name: 📦 Checkout Repository
         uses: actions/checkout@v4
@@ -50,5 +45,5 @@ jobs:
           title: 'chore: 🚀 update versions'
           version: pnpm changeset-version
         env:
-          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ env.NPM_TOKEN }}
