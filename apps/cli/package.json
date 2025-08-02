@@ -24,6 +24,9 @@
   "scripts": {
     "build": "tsup",
     "check-types": "tsc --noEmit",
+    "lint": "biome check",
+    "format": "biome format --write",
+    "lint:fix": "biome check --write --unsafe",
     "test": "vitest",
     "test:ci": "vitest run"
   },
