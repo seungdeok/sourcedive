@@ -23,6 +23,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "check-types": "tsc --noEmit",
     "test": "vitest",
     "test:ci": "vitest run"
   },
