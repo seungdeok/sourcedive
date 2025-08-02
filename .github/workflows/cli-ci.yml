@@ -7,11 +7,11 @@ on:
     branches:
       - main
     paths:
-      - packages/cli/**
+      - apps/cli/**
 
 defaults:
   run:
-    working-directory: packages/cli
+    working-directory: apps/cli
 
 jobs:
   setup:

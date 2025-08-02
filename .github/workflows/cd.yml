@@ -10,8 +10,12 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - packages/**
+    paths:
+      - apps/web/**
+
+defaults:
+  run:
+    working-directory: apps/web
 
 jobs:
   deploy:
