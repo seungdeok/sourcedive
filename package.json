@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo clean build",
+    "build": "turbo build",
     "lint": "biome check",
     "format": "biome format --write",
     "lint:fix": "biome check --write --unsafe",
