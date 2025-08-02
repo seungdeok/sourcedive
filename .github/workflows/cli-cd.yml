@@ -1,0 +1,50 @@
+name: CLI CD
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - apps/cli/**
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Enable Corepack
+        run: corepack enable
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
+
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 📦 Build
+        working-directory: apps/cli
+        run: pnpm build
+
+      - name: 📦 Publish
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          commit: 'chore: 🚀 update versions'
+          title: 'chore: 🚀 update versions'
+          version: pnpm changeset-version
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+          NPM_TOKEN: ${{ env.NPM_TOKEN }}

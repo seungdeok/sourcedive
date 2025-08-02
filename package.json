@@ -12,10 +12,13 @@
     "lint": "biome check",
     "format": "biome format --write",
     "lint:fix": "biome check --write --unsafe",
-    "check-types": "turbo check-types"
+    "check-types": "turbo check-types",
+    "changeset-version": "changeset version",
+    "release": "changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@changesets/cli": "^2.29.5",
     "lefthook": "^1.12.2",
     "turbo": "^2.5.5"
   }
