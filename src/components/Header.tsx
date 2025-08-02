@@ -1,3 +1,5 @@
+import { Github } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Header() {
@@ -6,13 +8,13 @@ export default function Header() {
       <div className="container mx-auto flex justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 h-12">
           <Link href="/" className="text-xl font-bold">
-            Source Dive
+            <Image src="/logo/sourcedive_white.png" alt="logo" width={48} height={48} />
           </Link>
         </div>
         <div className="flex items-center gap-4 h-12 justify-between">
           <div className="flex items-center gap-4">
             <Link href="https://github.com/seungdeok/sourcedive" target="_blank" className="text-xl font-bold">
-              Github
+              <Github />
             </Link>
           </div>
         </div>
