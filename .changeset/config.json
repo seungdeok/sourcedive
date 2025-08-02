@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@sourcedive/tsconfig", "@sourcedive/web"]
+  "ignore": ["@sourcedive/web"]
 }
