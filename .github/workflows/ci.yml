@@ -1,5 +1,11 @@
 name: CI
 
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
 on:
   workflow_dispatch:
   pull_request:
@@ -8,10 +14,6 @@ on:
       - main
     paths:
       - apps/web/**
-  
-defaults:
-  run:
-    working-directory: apps/web
 
 jobs:
   setup:
@@ -54,6 +56,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 🔍 Check Types
+        working-directory: apps/web
         run: pnpm run check-types
 
   lint:
@@ -77,6 +80,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: 🔍 Lint
+        working-directory: apps/web
         run: pnpm run lint
 
   build:
@@ -100,6 +104,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: 🔍 Build
+        working-directory: apps/web
         run: pnpm run build
 
   test:
@@ -126,4 +131,37 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: 🔍 Test
+        working-directory: apps/web
         run: pnpm run test:ci
+
+  preview:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Enable Corepack
+        run: corepack enable
+      
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
+
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: 🔍 Pull Vercel Environment Information
+        working-directory: apps/web
+        run: npx vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }}
+      
+      - name: 🔍 Build Project Artifacts
+        working-directory: apps/web
+        run: npx vercel build --token=${{ env.VERCEL_TOKEN }}
+      
+      - name: 🚀 Deploy Project Artifacts to Vercel
+        working-directory: apps/web
+        run: npx vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}

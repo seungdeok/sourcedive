@@ -9,10 +9,6 @@ on:
     paths:
       - apps/cli/**
 
-defaults:
-  run:
-    working-directory: apps/cli
-
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -54,6 +50,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 🔍 Check Types
+        working-directory: apps/cli
         run: pnpm run check-types
 
   lint:
@@ -77,6 +74,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: 🔍 Lint
+        working-directory: apps/cli
         run: pnpm run lint
 
   build:
@@ -100,6 +98,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: 🔍 Build
+        working-directory: apps/cli
         run: pnpm run build
 
   test:
@@ -123,4 +122,5 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 🔍 Test
+        working-directory: apps/cli
         run: pnpm run test:ci
