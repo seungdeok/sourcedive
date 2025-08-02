@@ -1,7 +1,6 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["esnext"],
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -9,9 +8,6 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-  },
-  "include": ["./src", "./bin"],
-  "exclude": ["node_modules", "dist"]
+    "isolatedModules": true
+  }
 }
-

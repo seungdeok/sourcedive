@@ -23,6 +23,10 @@
   },
   "scripts": {
     "build": "tsup",
+    "check-types": "tsc --noEmit",
+    "lint": "biome check",
+    "format": "biome format --write",
+    "lint:fix": "biome check --write --unsafe",
     "test": "vitest",
     "test:ci": "vitest run"
   },
@@ -33,6 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
+    "@sourcedive/tsconfig": "workspace:*",
     "tsup": "^8.3.5",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4"

@@ -1,4 +1,4 @@
-# sourcedive
+# 🔍 Sourcedive CLI
 외부 환경의 파일을 조회하려면 SourceDive CLI(Command Line Interface)를 사용해야 합니다.
 
 ## CLI 사용 가이드

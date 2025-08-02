@@ -1,0 +1,6 @@
+{
+  "extends": "@sourcedive/tsconfig/node.json",
+  "include": ["./src", "./__test__"],
+  "exclude": ["node_modules", "dist"]
+}
+

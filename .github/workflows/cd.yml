@@ -10,8 +10,8 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - packages/**
+    paths:
+      - apps/web/**
 
 jobs:
   deploy:
@@ -31,7 +31,7 @@ jobs:
           cache-dependency-path: "pnpm-lock.yaml"
 
       - name: 📦 Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --shamefully-hoist
       
       - name: 🔍 Pull Vercel Environment Information
         run: npx vercel pull --yes --environment=production --token=${{ env.VERCEL_TOKEN }}
