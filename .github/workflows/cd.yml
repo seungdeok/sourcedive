@@ -4,6 +4,7 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  GOOGLE_ADS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_ADS_ID }}
 
 on:
   workflow_dispatch:
@@ -32,6 +33,10 @@ jobs:
 
       - name: 📦 Install dependencies
         run: pnpm install --shamefully-hoist
+
+      - name: 📝 Generate ads.txt
+        run: |
+          echo "google.com, pub-${{ env.GOOGLE_ADS_ID }}, DIRECT, f08c47fec0942fa0" > apps/web/public/ads.txt
       
       - name: 🔍 Pull Vercel Environment Information
         run: npx vercel pull --yes --environment=production --token=${{ env.VERCEL_TOKEN }}
