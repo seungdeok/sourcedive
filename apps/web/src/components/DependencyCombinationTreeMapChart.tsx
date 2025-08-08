@@ -34,7 +34,7 @@ export function DependencyCombinationTreeMapChart({ packageName }: { packageName
       </CardHeader>
       <CardContent>
         {loading && <GlobalLoadingFallback />}
-        {!sizes && <div>데이터를 불러올 수 없습니다.</div>}
+        {!loading && !sizes && <div>데이터를 불러올 수 없습니다.</div>}
         {!loading && sizes && <TreeMapChart data={sizes.dependencySizes.map(d => [d.name, d.approximateSize])} />}
       </CardContent>
     </Card>
