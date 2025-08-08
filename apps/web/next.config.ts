@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
       exclude: process.env.NODE_ENV === "production" ? ["error", "warn"] : ["error", "warn", "log"],
     },
   },
+  env: {
+    NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA,
+  },
   experimental: {
     globalNotFound: true,
   },

@@ -61,6 +61,9 @@ export async function http(url: string, options: FetchOptions = {}): Promise<Res
       if (error.status >= 500) {
         Sentry.withScope(scope => {
           scope.setFingerprint([method, response.status.toString(), url]);
+          scope.setContext("app", {
+            version: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || "unknown",
+          });
           scope.setContext("response", {
             status: response.status,
             message: error.message,
@@ -87,6 +90,9 @@ export async function http(url: string, options: FetchOptions = {}): Promise<Res
     if (error instanceof Error) {
       Sentry.withScope(scope => {
         scope.setFingerprint([method, "unknown error", url]);
+        scope.setContext("app", {
+          version: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || "unknown",
+        });
         scope.setContext("request", { url, method, timeout });
         scope.setLevel("error");
         scope.setTag("source", "api");
