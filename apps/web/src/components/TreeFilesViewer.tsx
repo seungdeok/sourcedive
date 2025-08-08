@@ -1,5 +1,6 @@
 "use client";
 
+import { http, ApiError } from "@/lib/http";
 import type { GitHubItem } from "@/types/github";
 import { AlertCircle, ChevronDown, ChevronRight, ExternalLink, File, Folder, FolderOpen, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -279,13 +280,17 @@ function Fallback({ error }: { error: string }) {
 }
 
 async function getPackageFile(packageName: string, path: string): Promise<GitHubItem[]> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}/file?path=${encodeURIComponent(path)}`
-  );
+  try {
+    const response = await http(
+      `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}/file?path=${encodeURIComponent(path)}`
+    );
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch package file: ${response.status}`);
+    return response.json();
+  } catch (error: unknown) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+
+    throw new Error(`Failed to fetch package file: ${error}`);
   }
-
-  return response.json();
 }

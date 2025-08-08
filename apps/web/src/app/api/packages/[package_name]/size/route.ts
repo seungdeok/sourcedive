@@ -1,3 +1,4 @@
+import { http, InternetServerError, NotFoundError } from "@/lib/http";
 import type { PackageSize } from "@/types/package";
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -10,26 +11,20 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Package name is required" }, { status: 400 });
     }
 
-    const response = await fetch(`https://bundlephobia.com/api/size?package=${encodeURIComponent(packageName)}`);
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        return NextResponse.json({ error: `Package "${packageName}" not found` }, { status: 404 });
-      }
-
-      throw new Error(`Bundlephobia API returned ${response.status}`);
-    }
+    const response = await http(`https://bundlephobia.com/api/size?package=${encodeURIComponent(packageName)}`);
 
     const data: PackageSize = await response.json();
 
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json(
-      {
-        error: "Failed to fetch package information",
-        message: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    if (error instanceof NotFoundError) {
+      return NextResponse.json({ error: "Package not found" }, { status: 404 });
+    }
+
+    if (error instanceof InternetServerError) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown error" }, { status: 500 });
   }
 }

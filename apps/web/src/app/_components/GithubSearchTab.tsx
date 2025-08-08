@@ -13,6 +13,7 @@ import {
 import { Form, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useBrowserParams } from "@/hooks/useBrowserParams";
 import { useDebounce } from "@/hooks/useDebounce";
+import { http } from "@/lib/http";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -65,7 +66,7 @@ export default function GithubSearchTab() {
 
   useEffect(() => {
     if (debouncedKeyword && debouncedKeyword.length > 1) {
-      fetch(`https://api.github.com/search/repositories?q=${debouncedKeyword}`)
+      http(`https://api.github.com/search/repositories?q=${debouncedKeyword}`)
         .then(res => res.json())
         .then(data => {
           setSuggestions(data.items.map((item: { full_name: string }) => item.full_name));
