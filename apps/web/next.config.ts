@@ -54,6 +54,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  productionBrowserSourceMaps: true,
 };
 
 export default withSentryConfig(nextConfig, {
@@ -84,4 +85,13 @@ export default withSentryConfig(nextConfig, {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
+
+  // required to upload sourcemaps
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  sourcemaps: {
+    disable: process.env.NODE_ENV === "development",
+    assets: [".next/**/*.js", ".next/**/*.js.map"],
+    ignore: ["node_modules"],
+    deleteSourcemapsAfterUpload: true,
+  },
 });
