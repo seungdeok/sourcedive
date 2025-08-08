@@ -1,4 +1,5 @@
 import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
+import { http, NotFoundError } from "@/lib/http";
 import type { PackageVersion } from "@/types/package";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -23,17 +24,17 @@ export async function PackageDetail({ packageName }: Props) {
 }
 
 async function getPackageJSON(packageName: string): Promise<PackageVersion> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}`
-  );
+  try {
+    const response = await http(
+      `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}`
+    );
 
-  if (response.status === 404) {
-    notFound();
+    return response.json();
+  } catch (error: unknown) {
+    if (error instanceof NotFoundError) {
+      notFound();
+    }
+
+    throw error;
   }
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch package: ${response.status}`);
-  }
-
-  return response.json();
 }

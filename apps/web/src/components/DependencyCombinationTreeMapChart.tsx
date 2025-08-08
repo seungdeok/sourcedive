@@ -1,5 +1,6 @@
 "use client";
 
+import { http, NotFoundError } from "@/lib/http";
 import type { PackageSize } from "@/types/package";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -41,17 +42,17 @@ export function DependencyCombinationTreeMapChart({ packageName }: { packageName
 }
 
 async function getPackageDependencySizes(packageName: string): Promise<PackageSize> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}/size`
-  );
+  try {
+    const response = await http(
+      `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}/size`
+    );
 
-  if (response.status === 404) {
-    notFound();
+    return response.json();
+  } catch (error: unknown) {
+    if (error instanceof NotFoundError) {
+      notFound();
+    }
+
+    throw error;
   }
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch package: ${response.status}`);
-  }
-
-  return response.json();
 }

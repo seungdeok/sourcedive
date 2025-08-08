@@ -1,3 +1,4 @@
+import { http, InternetServerError, NotFoundError } from "@/lib/http";
 import { parseGithubURL } from "@/lib/parseGithubURL";
 import type { GitHubItem } from "@/types/github";
 import type { PackageVersion } from "@/types/package";
@@ -5,13 +6,14 @@ import { type NextRequest, NextResponse } from "next/server";
 
 async function fetchNpmPackageJson(packageName: string): Promise<PackageVersion> {
   try {
-    const response = await fetch(`https://registry.npmjs.org/${packageName}`);
-    if (!response.ok) {
-      throw new Error(`NPM package not found: ${packageName}`);
+    const response = await http(`https://registry.npmjs.org/${packageName}`);
+    return response.json();
+  } catch (error: unknown) {
+    if (error instanceof NotFoundError) {
+      throw new NotFoundError(`NPM package not found: ${packageName}`);
     }
-    return await response.json();
-  } catch (error) {
-    throw new Error(`Failed to fetch NPM package info: ${error}`);
+
+    throw new InternetServerError(`Failed to fetch NPM package info: ${error}`);
   }
 }
 
@@ -52,25 +54,25 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const { owner, repo } = ownerRepo;
     const pathString = path ? `/${path}` : "";
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents${pathString}`, {
+    const response = await http(`https://api.github.com/repos/${owner}/${repo}/contents${pathString}`, {
       headers: {
         Authorization: `Bearer ${process.env.GH_TOKEN}`,
         Accept: "application/vnd.github+json",
       },
     });
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        return NextResponse.json({ error: "Repository or path not found" }, { status: 404 });
-      }
-
-      throw new Error(`GitHub API returned ${response.status}`);
-    }
-
     const data: GitHubItem[] | GitHubItem = await response.json();
 
     return NextResponse.json(Array.isArray(data) ? data : [data]);
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof NotFoundError) {
+      return NextResponse.json({ error: "Repository or path not found" }, { status: 404 });
+    }
+
+    if (error instanceof InternetServerError) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown error" }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { http } from "@/lib/http";
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
 
@@ -180,7 +181,7 @@ export function FileDependencyGraphViewer({
       });
     };
 
-    fetch(`/api/github/dependency?entryFile=${entryFile}&githubRepo=https://github.com/${githubRepo}`)
+    http(`/api/github/dependency?entryFile=${entryFile}&githubRepo=https://github.com/${githubRepo}`)
       .then(res => res.json())
       .then(data => {
         const dependencies = data.dependencies || {};

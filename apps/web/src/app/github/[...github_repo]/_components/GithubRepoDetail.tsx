@@ -1,4 +1,5 @@
 import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
+import { http, NotFoundError } from "@/lib/http";
 import type { GitHubRepo } from "@/types/github";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -23,17 +24,17 @@ export async function GithubRepoDetail({ githubRepo }: Props) {
 }
 
 async function getGithubRepoJSON(githubRepo: string): Promise<GitHubRepo> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/github/${encodeURIComponent(githubRepo)}`
-  );
+  try {
+    const response = await http(
+      `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/github/${encodeURIComponent(githubRepo)}`
+    );
 
-  if (response.status === 404) {
-    notFound();
+    return response.json();
+  } catch (error: unknown) {
+    if (error instanceof NotFoundError) {
+      notFound();
+    }
+
+    throw error;
   }
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch github repository: ${response.status}`);
-  }
-
-  return response.json();
 }
