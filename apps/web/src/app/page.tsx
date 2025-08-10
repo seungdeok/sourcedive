@@ -2,6 +2,7 @@ import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
 import { GlobalLoadingFallback } from "@/components/GlobalLoadingFallback";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { FAQ } from "./_components/FAQ";
 import { MainTabs } from "./_components/MainTabs";
 
 export const metadata: Metadata = {
@@ -22,6 +23,10 @@ export default function Page() {
           <MainTabs />
         </Suspense>
       </GlobalErrorBoundary>
+
+      <div className="mt-16">
+        <FAQ />
+      </div>
     </div>
   );
 }
