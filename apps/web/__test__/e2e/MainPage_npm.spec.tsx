@@ -126,3 +126,108 @@ test("메인 페이지 > npm 검색 탭 > 검색어 입력 시 추천 검색어 
   await page.getByPlaceholder("패키지명을 입력해주세요").focus();
   await expect(page.getByText("react", { exact: true })).toBeVisible();
 });
+
+test("메인 페이지 > npm 검색 탭 > 키보드 ArrowUp/ArrowDown으로 추천 검색어를 선택할 수 있다", async ({ page }) => {
+  // given: 메인 페이지에 접속한다
+  await page.goto("/");
+  await page.waitForSelector("[role=tablist]");
+
+  const npmTab = page.getByRole("tab", { name: "🔍 NPM 검색" });
+  const searchInput = page.getByPlaceholder("패키지명을 입력해주세요");
+
+  // given: NPM API mocking
+  await page.route("**/api.npms.io/v2/search/suggestions?q=react", async route => {
+    const json = [{ package: { name: "react-dom" } }, { package: { name: "react-router" } }];
+    await route.fulfill({ json });
+  });
+
+  // when: npm 검색 탭을 클릭한다.
+  await npmTab.click();
+
+  // when: 검색어를 입력하고 추천 검색어를 조회한다.
+  await searchInput.fill("react");
+  await searchInput.focus();
+
+  // when: 추천 검색어가 표시될 때까지 기다린다
+  await expect(page.getByText("추천 검색어")).toBeVisible();
+
+  // when: ArrowDown 키를 눌러 마지막 추천 검색어를 선택한다
+  await searchInput.press("ArrowDown");
+  await searchInput.press("ArrowDown");
+
+  // then: 마지막 추천 검색어가 선택되고 input 값이 변경된다
+  const lastSuggestion = page.locator('[data-testid="npm-search-suggestions"] [aria-selected="true"]').last();
+  await expect(lastSuggestion).toBeVisible();
+  await expect(lastSuggestion).toHaveAttribute("aria-label", "react-router");
+  await expect(searchInput).toHaveValue("react-router");
+
+  // when: ArrowUp 키를 눌러 첫 번째 추천 검색어를 선택한다
+  await searchInput.press("ArrowUp");
+
+  // then: 첫 번째 추천 검색어가 선택되고 input 값이 변경된다
+  const firstSuggestion = page.locator('[data-testid="npm-search-suggestions"] [aria-selected="true"]').first();
+  await expect(firstSuggestion).toBeVisible();
+  await expect(firstSuggestion).toHaveAttribute("aria-label", "react-dom");
+  await expect(searchInput).toHaveValue("react-dom");
+});
+
+test("메인 페이지 > npm 검색 탭 > 키보드 Enter로 입력된 검색어로 검색할 수 있다", async ({ page }) => {
+  // given: 메인 페이지에 접속한다
+  await page.goto("/");
+  await page.waitForSelector("[role=tablist]");
+
+  const npmTab = page.getByRole("tab", { name: "🔍 NPM 검색" });
+  const searchInput = page.getByPlaceholder("패키지명을 입력해주세요");
+
+  // when: npm 검색 탭을 클릭한다.
+  await npmTab.click();
+
+  // when: 검색어를 입력한다.
+  await searchInput.fill("react");
+  await searchInput.focus();
+
+  // then: Enter 키를 누르면 상세 페이지로 이동한다
+  await searchInput.press("Enter");
+  await page.waitForURL("/packages/react");
+  await expect(page).toHaveURL("/packages/react");
+});
+
+test("메인 페이지 > npm 검색 탭 > 키보드 Escape로 원본 입력값으로 복원할 수 있다", async ({ page }) => {
+  // given: 메인 페이지에 접속한다
+  await page.goto("/");
+  await page.waitForSelector("[role=tablist]");
+
+  const npmTab = page.getByRole("tab", { name: "🔍 NPM 검색" });
+  const searchInput = page.getByPlaceholder("패키지명을 입력해주세요");
+
+  // given: NPM API mocking
+  await page.route("**/api.npms.io/v2/search/suggestions?q=react", async route => {
+    const json = [{ package: { name: "react-dom" } }, { package: { name: "react-router" } }];
+    await route.fulfill({ json });
+  });
+
+  // when: npm 검색 탭을 클릭한다.
+  await npmTab.click();
+
+  // when: 검색어를 입력하고 추천 검색어를 조회한다.
+  await searchInput.fill("react");
+  await searchInput.focus();
+
+  // when: 추천 검색어가 표시될 때까지 기다린다
+  await expect(page.getByText("추천 검색어")).toBeVisible();
+
+  // when: ArrowDown 키를 눌러 추천 검색어를 선택한다
+  await searchInput.press("ArrowDown");
+
+  // then: 추천 검색어가 선택되고 input 값이 변경된다
+  const suggestion = page.locator('[data-testid="npm-search-suggestions"] [aria-selected="true"]').first();
+  await expect(suggestion).toBeVisible();
+  await expect(suggestion).toHaveAttribute("aria-label", "react-dom");
+  await expect(searchInput).toHaveValue("react-dom");
+
+  // when: Escape 키를 눌러 원본 입력값으로 복원한다
+  await searchInput.press("Escape");
+
+  // then: 원본 입력값으로 복원된다
+  await expect(searchInput).toHaveValue("react");
+});

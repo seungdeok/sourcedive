@@ -1,3 +1,4 @@
+import type { PackageSize } from "@/types/package";
 import { expect, test } from "@playwright/test";
 
 test("패키지 상세 페이지 > 필수 meta 정보를 표시합니다.", async ({ page }) => {
@@ -74,6 +75,32 @@ test("패키지 상세 페이지 > 파일 뷰어의 파일 목록을 표시합�
 });
 
 test("패키지 상세 페이지 > 의존성 패키지 목록을 표시합니다.", async ({ page }) => {
+  await page.route("*/**/api/packages/react/size", async route => {
+    const json: PackageSize = {
+      assets: [],
+      dependencyCount: 0,
+      dependencySizes: [
+        {
+          approximateSize: 12834,
+          name: "react",
+        },
+      ],
+      description: "React is a JavaScript library for building user interfaces.",
+      gzip: 2915,
+      hasJSModule: false,
+      hasJSNext: false,
+      hasSideEffects: true,
+      isModuleType: false,
+      name: "react",
+      repository: "https://github.com/facebook/react.git",
+      scoped: false,
+      size: 7597,
+      version: "19.1.1",
+    };
+
+    await route.fulfill({ json });
+  });
+
   // given: package 상세 페이지에 접속한다
   await page.goto("/packages/react?tab=dependencies");
   await page.waitForSelector("[role=tablist]");
