@@ -9,7 +9,7 @@ export function FAQ() {
         <h2 className="text-3xl font-bold text-gray-900 mb-2">자주 묻는 질문</h2>
       </div>
 
-      <Card className="max-w-4xl mx-auto">
+      <Card className="max-w-full mx-auto">
         <CardContent className="p-6">
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
