@@ -10,7 +10,7 @@ test("랭킹 컴포넌트 > 랭킹 데이터를 표시합니다.", async ({ page
   // then: Package Rankings 섹션이 표시된다
   await expect(page.getByText("Package Rankings")).toBeVisible();
 
-  await expect(page.getByText("react")).toBeVisible();
+  await expect(page.getByText("next")).toBeVisible();
 
   // then: GitHub Rankings 섹션이 표시된다
   await expect(page.getByText("GitHub Rankings")).toBeVisible();
@@ -21,8 +21,8 @@ test("랭킹 컴포넌트 > 랭킹 항목 클릭 시 해당 항목 페이지로 
   await page.goto("/");
 
   // when: 패키지 랭킹 항목 클릭
-  const packageLink = page.getByRole("link").filter({ hasText: "react" }).first();
-  await expect(packageLink).toHaveAttribute("href", "/packages/react");
+  const packageLink = page.getByRole("link").filter({ hasText: "next" }).first();
+  await expect(packageLink).toHaveAttribute("href", "/packages/next");
 
   // when: GitHub 랭킹 항목 클릭
   const githubLink = page.getByRole("link").filter({ hasText: "microsoft/vscode" });
