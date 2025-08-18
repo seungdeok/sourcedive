@@ -4,8 +4,6 @@ test("메인 페이지 > FAQ > 섹션이 렌더링된다", async ({ page }) => {
   // given: 메인 페이지에 접속한다
   await page.goto("/");
 
-  await page.screenshot({ path: "faq.png" });
-
   // then: FAQ 제목이 표시된다
   await expect(page.locator("h2", { hasText: "자주 묻는 질문" })).toBeVisible();
 
