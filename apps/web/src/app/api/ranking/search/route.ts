@@ -1,4 +1,5 @@
 import { InternetServerError } from "@/lib/http";
+import type { RankingItem } from "@/types/ranking";
 import { Redis } from "@upstash/redis";
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -7,7 +8,7 @@ const redis = Redis.fromEnv();
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const limit = Number.parseInt(searchParams.get("limit") || "10");
+    const limit = Number.parseInt(searchParams.get("limit") || "5");
 
     const [packageResults, githubResults] = await Promise.all([
       redis.zrange("ranking:package", 0, limit - 1, { withScores: true, rev: true }),
@@ -30,13 +31,12 @@ export async function GET(request: NextRequest) {
   }
 }
 
-const formatRankings = (results: unknown[], type: string) => {
+const formatRankings = (results: unknown[], type: string): RankingItem[] => {
   const rankings = [];
   for (let i = 0; i < results.length; i += 2) {
     rankings.push({
       rank: Math.floor(i / 2) + 1,
       term: results[i] as string,
-      score: results[i + 1],
       searchType: type,
     });
   }

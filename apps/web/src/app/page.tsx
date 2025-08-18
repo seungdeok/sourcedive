@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { FAQ } from "./_components/FAQ";
 import { MainTabs } from "./_components/MainTabs";
+import { Ranking } from "./_components/Ranking";
 
 export const metadata: Metadata = {
   title: "패키지 조회",
@@ -23,6 +24,12 @@ export default function Page() {
           <MainTabs />
         </Suspense>
       </GlobalErrorBoundary>
+
+      <div className="mt-16">
+        <Suspense fallback={<GlobalLoadingFallback />}>
+          <Ranking />
+        </Suspense>
+      </div>
 
       <div className="mt-16">
         <FAQ />
