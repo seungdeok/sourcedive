@@ -1,12 +1,34 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { http } from "@/lib/http";
 import type { RankingItem } from "@/types/ranking";
 import { Github, Package, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export async function Ranking() {
-  const ranking = await getRanking();
+export function Ranking() {
+  const [data, setData] = useState<{
+    package: RankingItem[];
+    github: RankingItem[];
+  }>({
+    package: [],
+    github: [],
+  });
+
+  useEffect(() => {
+    http(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/ranking/search?limit=5`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setData(data.rankings);
+        }
+      })
+      .catch(error => {
+        console.warn("Ranking API failed:", error);
+      });
+  }, []);
 
   return (
     <section>
@@ -23,7 +45,7 @@ export async function Ranking() {
                 Package Rankings
               </>
             }
-            rankings={ranking.rankings.package}
+            rankings={data.package}
             type="package"
           />
           <RankingList
@@ -33,7 +55,7 @@ export async function Ranking() {
                 GitHub Rankings
               </>
             }
-            rankings={ranking.rankings.github}
+            rankings={data.github}
             type="github"
           />
         </div>
@@ -67,7 +89,7 @@ function RankingList({
             >
               <div className="flex items-center gap-3">
                 <Badge
-                  variant={index < 3 ? "default" : "secondary"}
+                  variant="default"
                   className={`
                 w-6 h-6 rounded-full flex items-center justify-center font-bold
               `}
@@ -82,20 +104,4 @@ function RankingList({
       </CardContent>
     </Card>
   );
-}
-
-async function getRanking(): Promise<{
-  success: boolean;
-  rankings: { package: RankingItem[]; github: RankingItem[] };
-}> {
-  try {
-    const response = await http(
-      `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/ranking/search?limit=5`
-    );
-
-    return response.json();
-  } catch (error: unknown) {
-    console.error("Failed to fetch ranking data:", error);
-    throw error;
-  }
 }

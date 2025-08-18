@@ -54,6 +54,8 @@ export default function GithubSearchTab() {
         searchType: "github",
         searchTerm: githubRepo,
       }),
+    }).catch(error => {
+      console.warn("Ranking API failed:", error);
     });
   };
 

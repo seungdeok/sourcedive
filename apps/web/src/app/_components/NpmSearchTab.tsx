@@ -53,6 +53,8 @@ export default function SearchTab() {
         searchType: "package",
         searchTerm: packageName,
       }),
+    }).catch(error => {
+      console.warn("Ranking API failed:", error);
     });
   };
 
