@@ -105,7 +105,7 @@ test("메인 페이지 > github 검색 탭 > 검색 후 다시 검색 페이지�
 
   // then: Input focus 시 최근 검색어 목록이 표시된다
   await page.getByPlaceholder("repository 이름을 입력해주세요").focus();
-  await expect(page.getByText("seungdeok/seungdeok")).toBeVisible();
+  await expect(page.getByTestId("github-repo-search-suggestions").getByText("seungdeok/seungdeok")).toBeVisible();
 });
 
 test("메인 페이지 > github 검색 탭 > 검색어 입력 시 추천 검색어 목록이 표시된다", async ({ page }) => {

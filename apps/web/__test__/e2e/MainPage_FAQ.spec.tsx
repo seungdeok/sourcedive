@@ -5,7 +5,7 @@ test("메인 페이지 > FAQ > 섹션이 렌더링된다", async ({ page }) => {
   await page.goto("/");
 
   // then: FAQ 제목이 표시된다
-  await expect(page.locator("h2")).toContainText("자주 묻는 질문");
+  await expect(page.locator("h2", { hasText: "자주 묻는 질문" })).toBeVisible();
 
   // then: FAQ 아코디언이 표시된다
   await expect(page.locator("[data-slot='accordion-item']")).toHaveCount(3);
