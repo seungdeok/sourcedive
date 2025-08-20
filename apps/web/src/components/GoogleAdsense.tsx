@@ -17,6 +17,8 @@ interface GoogleAdsenseProps {
   style?: React.CSSProperties;
 }
 
+const LOAD_AD_TIMEOUT = 2000;
+
 export const GoogleAdsense = ({
   adClient,
   adSlot,
@@ -37,12 +39,12 @@ export const GoogleAdsense = ({
 
     const loadAd = () => {
       if (typeof window !== "undefined" && window.adsbygoogle && adRef.current) {
-        window.adsbygoogle.push({});
+        window.adsbygoogle = (window.adsbygoogle || []).push({});
         setIsAdLoaded(true);
       }
     };
 
-    const timer = setTimeout(loadAd, 1000);
+    const timer = setTimeout(loadAd, LOAD_AD_TIMEOUT);
     return () => clearTimeout(timer);
   }, [isMounted, isAdLoaded]);
 
@@ -51,16 +53,18 @@ export const GoogleAdsense = ({
   }
 
   return (
-    <ins
-      ref={adRef as React.RefObject<HTMLModElement>}
-      className="adsbygoogle"
-      style={{
-        ...style,
-      }}
-      data-ad-client={adClient}
-      data-ad-slot={adSlot}
-      data-ad-format={format}
-      data-full-width-responsive={responsive}
-    />
+    <div style={{ ...style, minWidth: "320px" }}>
+      <ins
+        ref={adRef as React.RefObject<HTMLModElement>}
+        className="adsbygoogle"
+        style={{
+          ...style,
+        }}
+        data-ad-client={adClient}
+        data-ad-slot={adSlot}
+        data-ad-format={format}
+        data-full-width-responsive={responsive}
+      />
+    </div>
   );
 };
