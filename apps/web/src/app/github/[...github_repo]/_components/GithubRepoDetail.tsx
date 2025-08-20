@@ -29,6 +29,14 @@ async function getGithubRepoJSON(githubRepo: string): Promise<GitHubRepo> {
       `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/github/${encodeURIComponent(githubRepo)}`
     );
 
+    http(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/ranking/add`, {
+      method: "POST",
+      body: JSON.stringify({
+        searchType: "github",
+        searchTerm: githubRepo,
+      }),
+    });
+
     return response.json();
   } catch (error: unknown) {
     if (error instanceof NotFoundError) {

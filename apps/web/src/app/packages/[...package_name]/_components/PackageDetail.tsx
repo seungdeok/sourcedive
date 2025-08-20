@@ -29,6 +29,14 @@ async function getPackageJSON(packageName: string): Promise<PackageVersion> {
       `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}`
     );
 
+    http(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/ranking/add`, {
+      method: "POST",
+      body: JSON.stringify({
+        searchType: "package",
+        searchTerm: packageName,
+      }),
+    });
+
     return response.json();
   } catch (error: unknown) {
     if (error instanceof NotFoundError) {
