@@ -46,16 +46,6 @@ export default function SearchTab() {
   const addKeyword = (packageName: string) => {
     add(packageName);
     router.push(`/packages/${packageName}`);
-
-    http("/api/ranking/add", {
-      method: "POST",
-      body: JSON.stringify({
-        searchType: "package",
-        searchTerm: packageName,
-      }),
-    }).catch(error => {
-      console.warn("Ranking API failed:", error);
-    });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {

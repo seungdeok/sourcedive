@@ -16,6 +16,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "searchType은 package 또는 github여야 합니다." }, { status: 400 });
     }
 
+    /**
+     * 테스트 환경에서는 랭킹 추가를 하지 않습니다.
+     */
+    if (process.env.NODE_ENV === "development" || process.env.CI) {
+      return NextResponse.json({ success: true, data: { searchTerm, newScore: 1, searchType } });
+    }
+
     const key = `ranking:${searchType}`;
 
     const newScore = await redis.zincrby(key, 1, searchTerm);

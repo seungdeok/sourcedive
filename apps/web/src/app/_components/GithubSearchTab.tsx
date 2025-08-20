@@ -47,16 +47,6 @@ export default function GithubSearchTab() {
   const addKeyword = (githubRepo: string) => {
     add(githubRepo);
     router.push(`/github/${githubRepo}`);
-
-    http("/api/ranking/add", {
-      method: "POST",
-      body: JSON.stringify({
-        searchType: "github",
-        searchTerm: githubRepo,
-      }),
-    }).catch(error => {
-      console.warn("Ranking API failed:", error);
-    });
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {

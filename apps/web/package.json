@@ -15,7 +15,7 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:e2e": "playwright test",
-    "test:ci": "vitest run && pnpm test:e2e"
+    "test:ci": "CI=true vitest run && pnpm test:e2e"
   },
   "dependencies": {
     "@billboard.js/react": "^1.1.1",
