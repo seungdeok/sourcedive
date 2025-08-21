@@ -1,6 +1,5 @@
 import type { GitHubRepo } from "@/types/github";
-import { notFound } from "next/navigation";
-import { http, NotFoundError } from "../http";
+import { http, ApiError } from "../http";
 import { queries } from "./queryKeys";
 
 type DependencyGraphResponse = {
@@ -30,11 +29,11 @@ async function getGithubRepoDetail(githubRepo: string): Promise<GitHubRepo> {
 
     return response.json();
   } catch (error: unknown) {
-    if (error instanceof NotFoundError) {
-      notFound();
+    if (error instanceof ApiError) {
+      throw error;
     }
 
-    throw error;
+    throw new Error(`Failed to fetch github repo detail: ${error}`);
   }
 }
 

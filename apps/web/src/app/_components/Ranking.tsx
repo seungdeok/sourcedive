@@ -4,12 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { rankingQueries } from "@/lib/api/ranking";
 import type { RankingItem } from "@/types/ranking";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Github, Package, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 export function Ranking() {
-  const { data } = useSuspenseQuery({
+  const { data } = useQuery({
     ...rankingQueries.list(),
   });
 
@@ -28,7 +28,7 @@ export function Ranking() {
                 Package Rankings
               </>
             }
-            rankings={data.rankings.package}
+            rankings={data?.rankings.package ?? []}
             type="package"
           />
           <RankingList
@@ -38,7 +38,7 @@ export function Ranking() {
                 GitHub Rankings
               </>
             }
-            rankings={data.rankings.github}
+            rankings={data?.rankings.github ?? []}
             type="github"
           />
         </div>

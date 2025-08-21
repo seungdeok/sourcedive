@@ -1,5 +1,5 @@
 import type { RankingItem } from "@/types/ranking";
-import { http } from "../http";
+import { http, ApiError } from "../http";
 import { queries } from "./queryKeys";
 
 type RankingResponse = {
@@ -18,8 +18,11 @@ async function getRanking(limit = 5): Promise<RankingResponse> {
 
     return response.json();
   } catch (error: unknown) {
-    console.warn("Ranking API failed:", error);
-    throw error;
+    if (error instanceof ApiError) {
+      throw error;
+    }
+
+    throw new Error(`Failed to fetch ranking: ${error}`);
   }
 }
 

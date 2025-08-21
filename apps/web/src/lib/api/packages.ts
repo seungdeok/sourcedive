@@ -28,11 +28,11 @@ async function getPackageDependencySizes(packageName: string): Promise<PackageSi
 
     return response.json();
   } catch (error: unknown) {
-    if (error instanceof NotFoundError) {
-      notFound();
+    if (error instanceof ApiError) {
+      throw error;
     }
 
-    throw error;
+    throw new Error(`Failed to fetch package dependency sizes: ${error}`);
   }
 }
 
@@ -52,11 +52,11 @@ async function getPackageDetail(packageName: string): Promise<PackageVersion> {
 
     return response.json();
   } catch (error: unknown) {
-    if (error instanceof NotFoundError) {
-      notFound();
+    if (error instanceof ApiError) {
+      throw error;
     }
 
-    throw error;
+    throw new Error(`Failed to fetch package detail: ${error}`);
   }
 }
 
