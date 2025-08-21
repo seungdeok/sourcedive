@@ -41,3 +41,8 @@ test("메인 페이지 > 탭을 클릭하면 해당 섹션이 표시된다", asy
   await expect(githubTab).toHaveAttribute("aria-selected", "false");
   await expect(externalTab).toHaveAttribute("aria-selected", "true");
 });
+
+test("메인 페이지 > Footer가 렌더링된다.", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("footer")).toBeVisible();
+});

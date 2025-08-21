@@ -43,14 +43,17 @@ export default function SearchTab() {
   const allItems = useMemo(() => [...recentKeywords, ...suggestions], [recentKeywords, suggestions]);
   const debouncedKeyword = useDebounce(keyword, 300);
 
+  const addKeyword = (packageName: string) => {
+    add(packageName);
+    router.push(`/packages/${packageName}`);
+  };
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    add(values.packageName);
-    router.push(`/packages/${values.packageName}`);
+    addKeyword(values.packageName);
   }
 
   const handleClickKeyword = (keyword: string) => {
-    add(keyword);
-    router.push(`/packages/${keyword}`);
+    addKeyword(keyword);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -124,7 +127,7 @@ export default function SearchTab() {
                       onChange={handleChange}
                       placeholder="패키지명을 입력해주세요"
                       onFocus={() => setOpen(true)}
-                      // onBlur={() => setTimeout(() => setOpen(false), 200)}
+                      onBlur={() => setTimeout(() => setOpen(false), 200)}
                     />
                     {open && allItems.length > 0 && (
                       <div

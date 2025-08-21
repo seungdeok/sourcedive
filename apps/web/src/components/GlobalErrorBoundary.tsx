@@ -34,14 +34,16 @@ export class GlobalErrorBoundary extends React.Component<ErrorBoundaryProps, Err
 
   public render() {
     if (this.state.hasError) {
-      if (!this.props.fallback) {
-        return <GlobalFallback error={this.state.error} reset={this.reset} />;
-      }
+      const content = this.props.fallback ? (
+        this.props.fallback({
+          error: this.state.error,
+          reset: this.reset,
+        })
+      ) : (
+        <GlobalFallback error={this.state.error} reset={this.reset} />
+      );
 
-      return this.props.fallback({
-        error: this.state.error,
-        reset: this.reset,
-      });
+      return <div aria-label="ErrorBoundary">{content}</div>;
     }
 
     return this.props.children;

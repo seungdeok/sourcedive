@@ -1,7 +1,8 @@
 "use client";
 
-import { http, ApiError } from "@/lib/http";
+import { packageQueries } from "@/lib/api/packages";
 import type { GitHubItem } from "@/types/github";
+import { useQueryClient } from "@tanstack/react-query";
 import { AlertCircle, ChevronDown, ChevronRight, ExternalLink, File, Folder, FolderOpen, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -21,11 +22,15 @@ export function TreeFilesViewer({
   const [treeData, setTreeData] = useState<TreeNodeData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const loadDirectory = useCallback(
     async (path = "") => {
       try {
-        const data = await getPackageFile(packageName, path);
+        const data = await queryClient.fetchQuery({
+          ...packageQueries.file(packageName, path),
+          staleTime: 5 * 60 * 1000,
+        });
 
         if (path === "") {
           const rootNodes: TreeNodeData[] = data.map(node => ({
@@ -47,7 +52,7 @@ export function TreeFilesViewer({
         setLoading(false);
       }
     },
-    [packageName]
+    [packageName, queryClient]
   );
 
   const updateTree = (targetPath: string, newItems: GitHubItem[]) => {
@@ -277,20 +282,4 @@ function Fallback({ error }: { error: string }) {
       </div>
     </div>
   );
-}
-
-async function getPackageFile(packageName: string, path: string): Promise<GitHubItem[]> {
-  try {
-    const response = await http(
-      `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/packages/${encodeURIComponent(packageName)}/file?path=${encodeURIComponent(path)}`
-    );
-
-    return response.json();
-  } catch (error: unknown) {
-    if (error instanceof ApiError) {
-      throw error;
-    }
-
-    throw new Error(`Failed to fetch package file: ${error}`);
-  }
 }
