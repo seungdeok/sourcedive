@@ -48,7 +48,8 @@ test("메인 페이지 > github 검색 탭 > 존재하지 않는 repository를 �
   await page.getByRole("button", { name: "🔍 검색" }).click();
   await page.waitForURL("/github/seungdeok/test");
   await expect(page).toHaveURL("/github/seungdeok/test");
-  await expect(page.getByText("NEXT_HTTP_ERROR_FALLBACK;404")).toBeVisible();
+  await page.waitForSelector('[aria-label="ErrorBoundary"]', { timeout: 10000 });
+  await expect(page.getByLabel("ErrorBoundary")).toBeVisible();
 });
 
 test("메인 페이지 > github 검색 탭 > 존재하는 repository를 검색하면 패키지 상세 페이지로 이동한다", async ({

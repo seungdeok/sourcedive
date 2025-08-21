@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { RQProvider } from "@/components/providers/RQProvider";
 import Script from "next/script";
 import { Footer } from "./_components/Footer";
 
@@ -32,8 +33,11 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
       </head>
       <body className={`${pretendard.variable} antialiased min-h-screen flex flex-col`}>
-        <Header />
-        <main className="container mx-auto pt-12 px-4 sm:px-6 lg:px-8 flex-1">{children}</main>
+        <RQProvider>
+          <Header />
+          <main className="container mx-auto pt-12 px-4 sm:px-6 lg:px-8 flex-1">{children}</main>
+          <Footer />
+        </RQProvider>
         {process.env.NODE_ENV === "production" && <Analytics />}
         {process.env.NODE_ENV === "production" && <SpeedInsights />}
         {process.env.NODE_ENV === "production" && (
@@ -44,7 +48,6 @@ export default function RootLayout({
             strategy="lazyOnload"
           />
         )}
-        <Footer />
       </body>
     </html>
   );
