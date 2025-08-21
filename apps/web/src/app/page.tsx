@@ -26,7 +26,9 @@ export default function Page() {
       </GlobalErrorBoundary>
 
       <div className="mt-16">
-        <Ranking />
+        <Suspense fallback={<GlobalLoadingFallback />}>
+          <Ranking />
+        </Suspense>
       </div>
 
       <div className="mt-16">

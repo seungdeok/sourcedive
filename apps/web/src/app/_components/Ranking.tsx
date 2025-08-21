@@ -2,33 +2,16 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { http } from "@/lib/http";
+import { rankingQueries } from "@/lib/api/ranking";
 import type { RankingItem } from "@/types/ranking";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Github, Package, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 export function Ranking() {
-  const [data, setData] = useState<{
-    package: RankingItem[];
-    github: RankingItem[];
-  }>({
-    package: [],
-    github: [],
+  const { data } = useSuspenseQuery({
+    ...rankingQueries.list(),
   });
-
-  useEffect(() => {
-    http(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/ranking/search?limit=5`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setData(data.rankings);
-        }
-      })
-      .catch(error => {
-        console.warn("Ranking API failed:", error);
-      });
-  }, []);
 
   return (
     <section>
@@ -45,7 +28,7 @@ export function Ranking() {
                 Package Rankings
               </>
             }
-            rankings={data.package}
+            rankings={data.rankings.package}
             type="package"
           />
           <RankingList
@@ -55,7 +38,7 @@ export function Ranking() {
                 GitHub Rankings
               </>
             }
-            rankings={data.github}
+            rankings={data.rankings.github}
             type="github"
           />
         </div>
