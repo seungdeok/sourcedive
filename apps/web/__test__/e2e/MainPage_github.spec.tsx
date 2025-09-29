@@ -48,7 +48,8 @@ test("메인 페이지 > github 검색 탭 > 존재하지 않는 repository를 �
   await page.getByRole("button", { name: "🔍 검색" }).click();
   await page.waitForURL("/github/seungdeok/test");
   await expect(page).toHaveURL("/github/seungdeok/test");
-  await expect(page.getByText("NEXT_HTTP_ERROR_FALLBACK;404")).toBeVisible();
+  await page.waitForSelector('[aria-label="ErrorBoundary"]', { timeout: 10000 });
+  await expect(page.getByLabel("ErrorBoundary")).toBeVisible();
 });
 
 test("메인 페이지 > github 검색 탭 > 존재하는 repository를 검색하면 패키지 상세 페이지로 이동한다", async ({
@@ -105,7 +106,7 @@ test("메인 페이지 > github 검색 탭 > 검색 후 다시 검색 페이지�
 
   // then: Input focus 시 최근 검색어 목록이 표시된다
   await page.getByPlaceholder("repository 이름을 입력해주세요").focus();
-  await expect(page.getByText("seungdeok/seungdeok")).toBeVisible();
+  await expect(page.getByTestId("github-repo-search-suggestions").getByText("seungdeok/seungdeok")).toBeVisible();
 });
 
 test("메인 페이지 > github 검색 탭 > 검색어 입력 시 추천 검색어 목록이 표시된다", async ({ page }) => {

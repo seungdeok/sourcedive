@@ -44,13 +44,17 @@ export default function GithubSearchTab() {
   const allItems = useMemo(() => [...recentKeywords, ...suggestions], [recentKeywords, suggestions]);
   const debouncedKeyword = useDebounce(keyword, 300);
 
+  const addKeyword = (githubRepo: string) => {
+    add(githubRepo);
+    router.push(`/github/${githubRepo}`);
+  };
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    add(values.githubRepo);
-    router.push(`/github/${values.githubRepo}`);
+    addKeyword(values.githubRepo);
   }
 
   const handleClickKeyword = (keyword: string) => {
-    router.push(`/github/${keyword}`);
+    addKeyword(keyword);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -122,7 +126,7 @@ export default function GithubSearchTab() {
                       onChange={handleChange}
                       placeholder="repository 이름을 입력해주세요"
                       onFocus={() => setOpen(true)}
-                      // onBlur={() => setTimeout(() => setOpen(false), 200)}
+                      onBlur={() => setTimeout(() => setOpen(false), 200)}
                     />
                     {open && allItems.length > 0 && (
                       <div

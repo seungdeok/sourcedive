@@ -52,7 +52,8 @@ test("메인 페이지 > npm 검색 탭 > 존재하지 않는 패키지를 검�
   await page.getByRole("button", { name: "🔍 검색" }).click();
   await page.waitForURL("/packages/aab1bbc2");
   await expect(page).toHaveURL("/packages/aab1bbc2");
-  await expect(page.getByText("NEXT_HTTP_ERROR_FALLBACK;404")).toBeVisible();
+  await page.waitForSelector('[aria-label="ErrorBoundary"]', { timeout: 10000 });
+  await expect(page.getByLabel("ErrorBoundary")).toBeVisible();
 });
 
 test("메인 페이지 > npm 검색 탭 > 존재하는 패키지를 검색하면 패키지 상세 페이지로 이동한다", async ({ page }) => {
@@ -107,7 +108,7 @@ test("메인 페이지 > npm 검색 탭 > 검색 후 다시 검색 페이지로 
 
   // then: Input focus 시 최근 검색어 목록이 표시된다
   await page.getByPlaceholder("패키지명을 입력해주세요").focus();
-  await expect(page.getByText("react")).toBeVisible();
+  await expect(page.getByTestId("npm-search-suggestions").getByText("react")).toBeVisible();
 });
 
 test("메인 페이지 > npm 검색 탭 > 검색어 입력 시 추천 검색어 목록이 표시된다", async ({ page }) => {
